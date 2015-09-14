@@ -155,8 +155,43 @@ namespace SS_OpenCV
             Cursor = Cursors.Default; // cursor normal
         }
 
+        private void fastNegativeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+            Cursor = Cursors.WaitCursor; // cursor relogio
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
+            ImageClass.FastNegative(img);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+            
 
 
+        }
 
+        private void blueChannelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+            Cursor = Cursors.WaitCursor; // cursor relogio
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
+            ImageClass.OneComponent(img, 0);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+        }
     }
 }

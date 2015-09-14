@@ -83,6 +83,42 @@ namespace SS_OpenCV
             }
         }
 
+        internal static void FastNegative(Image<Bgr, byte> img)
+        {
+            unsafe
+            {
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels; // numero de canais 3
+                int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+                int x, y;
 
+                if (nChan == 3) // imagem em RGB
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        for (x = 0; x < width; x++)
+                        {
+                            //obtém as 3 componentes
+                            dataPtr[0] = (byte)(255 - dataPtr[0]);
+                            dataPtr[1] = (byte)(255- dataPtr[1]);
+                            dataPtr[2] = (byte)(255 - dataPtr[2]);
+
+                            // avança apontador para próximo pixel
+                            dataPtr += nChan;
+                        }
+                        //no fim da linha avança alinhamento (padding)
+                        dataPtr += padding;
+                    }
+                }
+            }
+        }
+
+        internal static void OneComponent(Image<Bgr, byte> img, int v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
