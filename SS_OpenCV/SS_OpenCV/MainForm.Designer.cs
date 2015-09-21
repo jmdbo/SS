@@ -44,6 +44,11 @@
             this.grayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bWToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.negativeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fastNegativeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.oneChannelGreyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.blueChannelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.greenChannelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.redChannelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.transformsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.translationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rotationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,11 +58,6 @@
             this.autoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ImageViewer = new System.Windows.Forms.PictureBox();
-            this.fastNegativeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.oneChannelGreyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.blueChannelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.greenChannelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.redChannelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageViewer)).BeginInit();
@@ -160,7 +160,7 @@
             this.grayToolStripMenuItem,
             this.bWToolStripMenuItem});
             this.convertToToolStripMenuItem.Name = "convertToToolStripMenuItem";
-            this.convertToToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.convertToToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.convertToToolStripMenuItem.Text = "Convert To";
             // 
             // grayToolStripMenuItem
@@ -179,9 +179,47 @@
             // negativeToolStripMenuItem
             // 
             this.negativeToolStripMenuItem.Name = "negativeToolStripMenuItem";
-            this.negativeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.negativeToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.negativeToolStripMenuItem.Text = "Negative";
             this.negativeToolStripMenuItem.Click += new System.EventHandler(this.negativeToolStripMenuItem_Click);
+            // 
+            // fastNegativeToolStripMenuItem
+            // 
+            this.fastNegativeToolStripMenuItem.Name = "fastNegativeToolStripMenuItem";
+            this.fastNegativeToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.fastNegativeToolStripMenuItem.Text = "Fast Negative";
+            this.fastNegativeToolStripMenuItem.Click += new System.EventHandler(this.fastNegativeToolStripMenuItem_Click);
+            // 
+            // oneChannelGreyToolStripMenuItem
+            // 
+            this.oneChannelGreyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.blueChannelToolStripMenuItem,
+            this.greenChannelToolStripMenuItem,
+            this.redChannelToolStripMenuItem});
+            this.oneChannelGreyToolStripMenuItem.Name = "oneChannelGreyToolStripMenuItem";
+            this.oneChannelGreyToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.oneChannelGreyToolStripMenuItem.Text = "One Channel (Grey)";
+            // 
+            // blueChannelToolStripMenuItem
+            // 
+            this.blueChannelToolStripMenuItem.Name = "blueChannelToolStripMenuItem";
+            this.blueChannelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.blueChannelToolStripMenuItem.Text = "Blue Channel";
+            this.blueChannelToolStripMenuItem.Click += new System.EventHandler(this.blueChannelToolStripMenuItem_Click);
+            // 
+            // greenChannelToolStripMenuItem
+            // 
+            this.greenChannelToolStripMenuItem.Name = "greenChannelToolStripMenuItem";
+            this.greenChannelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.greenChannelToolStripMenuItem.Text = "Green Channel";
+            this.greenChannelToolStripMenuItem.Click += new System.EventHandler(this.greenChannelToolStripMenuItem_Click);
+            // 
+            // redChannelToolStripMenuItem
+            // 
+            this.redChannelToolStripMenuItem.Name = "redChannelToolStripMenuItem";
+            this.redChannelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.redChannelToolStripMenuItem.Text = "Red Channel";
+            this.redChannelToolStripMenuItem.Click += new System.EventHandler(this.redChannelToolStripMenuItem_Click);
             // 
             // transformsToolStripMenuItem
             // 
@@ -198,17 +236,18 @@
             this.translationToolStripMenuItem.Name = "translationToolStripMenuItem";
             this.translationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.translationToolStripMenuItem.Text = "Translation";
+            this.translationToolStripMenuItem.Click += new System.EventHandler(this.translationToolStripMenuItem_Click);
             // 
             // rotationToolStripMenuItem
             // 
             this.rotationToolStripMenuItem.Name = "rotationToolStripMenuItem";
-            this.rotationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rotationToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.rotationToolStripMenuItem.Text = "Rotation";
             // 
             // zoomToolStripMenuItem
             // 
             this.zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
-            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.zoomToolStripMenuItem.Text = "Zoom";
             // 
             // filtersToolStripMenuItem
@@ -250,42 +289,6 @@
             this.ImageViewer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.ImageViewer.TabIndex = 6;
             this.ImageViewer.TabStop = false;
-            // 
-            // fastNegativeToolStripMenuItem
-            // 
-            this.fastNegativeToolStripMenuItem.Name = "fastNegativeToolStripMenuItem";
-            this.fastNegativeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.fastNegativeToolStripMenuItem.Text = "Fast Negative";
-            this.fastNegativeToolStripMenuItem.Click += new System.EventHandler(this.fastNegativeToolStripMenuItem_Click);
-            // 
-            // oneChannelGreyToolStripMenuItem
-            // 
-            this.oneChannelGreyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.blueChannelToolStripMenuItem,
-            this.greenChannelToolStripMenuItem,
-            this.redChannelToolStripMenuItem});
-            this.oneChannelGreyToolStripMenuItem.Name = "oneChannelGreyToolStripMenuItem";
-            this.oneChannelGreyToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
-            this.oneChannelGreyToolStripMenuItem.Text = "One Channel (Grey)";
-            // 
-            // blueChannelToolStripMenuItem
-            // 
-            this.blueChannelToolStripMenuItem.Name = "blueChannelToolStripMenuItem";
-            this.blueChannelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.blueChannelToolStripMenuItem.Text = "Blue Channel";
-            this.blueChannelToolStripMenuItem.Click += new System.EventHandler(this.blueChannelToolStripMenuItem_Click);
-            // 
-            // greenChannelToolStripMenuItem
-            // 
-            this.greenChannelToolStripMenuItem.Name = "greenChannelToolStripMenuItem";
-            this.greenChannelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.greenChannelToolStripMenuItem.Text = "Green Channel";
-            // 
-            // redChannelToolStripMenuItem
-            // 
-            this.redChannelToolStripMenuItem.Name = "redChannelToolStripMenuItem";
-            this.redChannelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.redChannelToolStripMenuItem.Text = "Red Channel";
             // 
             // MainForm
             // 

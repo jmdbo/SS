@@ -186,12 +186,84 @@ namespace SS_OpenCV
             imgUndo = img.Copy();
             DateTime d1 = DateTime.Now;
 
-            ImageClass.OneComponent(img, 0);
+            ImageClass.BlueComponent(img);
 
             ImageViewer.Refresh(); // atualiza imagem no ecrã
             DateTime d2 = DateTime.Now;
             Cursor = Cursors.Default; // cursor normal
             MessageBox.Show((d2 - d1).ToString());
+        }
+
+        private void greenChannelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+            Cursor = Cursors.WaitCursor; // cursor relogio
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
+            ImageClass.GreenComponent(img);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+
+        }
+
+        private void redChannelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+            Cursor = Cursors.WaitCursor; // cursor relogio
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
+            ImageClass.RedComponent(img);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+
+        }
+
+        private void translationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int Dx, Dy;
+
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;            
+
+            TranslationBox frame = new TranslationBox();
+            frame.ShowDialog();
+            Cursor = Cursors.WaitCursor; // cursor relogio
+            try
+            {
+                Dx = Int32.Parse(frame.DxTextBox.Text);
+                Dy = Int32.Parse(frame.DyTextBox.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please insert integer values!");
+                return;
+            }
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
+            ImageClass.Translation(imgUndo, img, Dx, Dy);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+
         }
     }
 }

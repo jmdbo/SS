@@ -84,6 +84,12 @@
       <DependentUpon>AuthorsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageClass.cs" />
+    <Compile Include="TranslationBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TranslationBox.designer.cs">
+      <DependentUpon>TranslationBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="InputBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,9 @@
     <EmbeddedResource Include="AuthorsForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AuthorsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TranslationBox.resx">
+      <DependentUpon>TranslationBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>

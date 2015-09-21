@@ -116,9 +116,147 @@ namespace SS_OpenCV
             }
         }
 
-        internal static void OneComponent(Image<Bgr, byte> img, int v)
+        internal static void BlueComponent(Image<Bgr, byte> img)
         {
-            throw new NotImplementedException();
+            unsafe
+            {
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels; // numero de canais 3
+                int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+                int x, y;
+
+                if (nChan == 3) // imagem em RGB
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        for (x = 0; x < width; x++)
+                        {
+                            //obtém as 3 componentes
+                            //dataPtr[0] = (byte)(255 - dataPtr[0]);
+                            dataPtr[1] = dataPtr[0];
+                            dataPtr[2] = dataPtr[0];
+
+                            // avança apontador para próximo pixel
+                            dataPtr += nChan;
+                        }
+                        //no fim da linha avança alinhamento (padding)
+                        dataPtr += padding;
+                    }
+                }
+            }
+        }
+
+        internal static void GreenComponent(Image<Bgr, byte> img)
+        {
+            unsafe
+            {
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels; // numero de canais 3
+                int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+                int x, y;
+
+                if (nChan == 3) // imagem em RGB
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        for (x = 0; x < width; x++)
+                        {
+                            //obtém as 3 componentes
+                            //dataPtr[0] = (byte)(255 - dataPtr[0]);
+                            dataPtr[0] = dataPtr[1];
+                            dataPtr[2] = dataPtr[1];
+
+                            // avança apontador para próximo pixel
+                            dataPtr += nChan;
+                        }
+                        //no fim da linha avança alinhamento (padding)
+                        dataPtr += padding;
+                    }
+                }
+            }
+        }
+
+        internal static void RedComponent(Image<Bgr, byte> img)
+        {
+            unsafe
+            {
+                MIplImage m = img.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels; // numero de canais 3
+                int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+                int x, y;
+
+                if (nChan == 3) // imagem em RGB
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        for (x = 0; x < width; x++)
+                        {
+                            dataPtr[0] = dataPtr[2];
+                            dataPtr[1] = dataPtr[2];
+
+                            // avança apontador para próximo pixel
+                            dataPtr += nChan;
+                        }
+                        //no fim da linha avança alinhamento (padding)
+                        dataPtr += padding;
+                    }
+                }
+            }
+        }
+
+        internal static void Translation(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img, int dx, int dy)
+        {
+            unsafe
+            {
+                MIplImage m = img.MIplImage;
+                MIplImage n = imgUndo.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+                byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels; // numero de canais 3
+                int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+                int x, y;
+
+                if (nChan == 3) // imagem em RGB
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        for (x = 0; x < width; x++)
+                        {
+                            if((y-dy >= 0) && (x-dx >= 0) && (y-dy< height) && (x-dx < width))
+                            {
+                                
+                                dataPtr[0] = (dataUndoPtr + (y - dy) * n.widthStep + (x - dx) * nChan)[0];
+                                dataPtr[1] = (dataUndoPtr + (y - dy) * n.widthStep + (x - dx) * nChan)[1];
+                                dataPtr[2] = (dataUndoPtr + (y - dy) * n.widthStep + (x - dx) * nChan)[2];
+                            }
+                            else
+                            {
+                                dataPtr[0] = 0;
+                                dataPtr[1] = 0;
+                                dataPtr[2] = 0;
+                            }
+                            
+
+                            // avança apontador para próximo pixel
+                            dataPtr += nChan;
+                        }
+                        //no fim da linha avança alinhamento (padding)
+                        dataPtr += padding;
+                    }
+                }
+            }
+
         }
     }
 }
