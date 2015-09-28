@@ -248,8 +248,6 @@ namespace SS_OpenCV
                                 dataPtr[1] = 0;
                                 dataPtr[2] = 0;
                             }
-                            
-
                             // avança apontador para próximo pixel
                             dataPtr += nChan;
                         }
