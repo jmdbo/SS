@@ -265,5 +265,38 @@ namespace SS_OpenCV
             MessageBox.Show((d2 - d1).ToString());
 
         }
+
+        private void rotationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            float Angle;
+
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+
+            InputBox frame = new InputBox("Rotation Angle");
+            frame.ShowDialog();
+            Cursor = Cursors.WaitCursor; // cursor relogio
+            try
+            {
+                Angle = float.Parse(frame.ValueTextBox.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please insert float values!");
+                return;
+            }
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
+            ImageClass.Rotation(imgUndo, img, Angle);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+
+        }
     }
 }

@@ -66,7 +66,7 @@
             this.DyTextBox.Location = new System.Drawing.Point(67, 45);
             this.DyTextBox.Name = "DyTextBox";
             this.DyTextBox.Size = new System.Drawing.Size(100, 20);
-            this.DyTextBox.TabIndex = 3;
+            this.DyTextBox.TabIndex = 1;
             // 
             // label2
             // 

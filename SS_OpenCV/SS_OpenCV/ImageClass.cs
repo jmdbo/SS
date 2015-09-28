@@ -225,7 +225,7 @@ namespace SS_OpenCV
                 int height = img.Height;
                 int nChan = m.nChannels; // numero de canais 3
                 int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
-                int x, y;
+                int x, y, xOrig, yOrig;
 
                 if (nChan == 3) // imagem em RGB
                 {
@@ -233,12 +233,14 @@ namespace SS_OpenCV
                     {
                         for (x = 0; x < width; x++)
                         {
-                            if((y-dy >= 0) && (x-dx >= 0) && (y-dy< height) && (x-dx < width))
+                            xOrig = x - dx;
+                            yOrig = y - dy;
+                            if ((yOrig >= 0) && (xOrig >= 0) && (yOrig< height) && (xOrig < width))
                             {
                                 
-                                dataPtr[0] = (dataUndoPtr + (y - dy) * n.widthStep + (x - dx) * nChan)[0];
-                                dataPtr[1] = (dataUndoPtr + (y - dy) * n.widthStep + (x - dx) * nChan)[1];
-                                dataPtr[2] = (dataUndoPtr + (y - dy) * n.widthStep + (x - dx) * nChan)[2];
+                                dataPtr[0] = (dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[0];
+                                dataPtr[1] = (dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[1];
+                                dataPtr[2] = (dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[2];
                             }
                             else
                             {
@@ -257,6 +259,55 @@ namespace SS_OpenCV
                 }
             }
 
+        }
+
+        internal static void Rotation(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img, float angle)
+        {
+            unsafe
+            {
+                MIplImage m = img.MIplImage;
+                MIplImage n = imgUndo.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+                byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels; // numero de canais 3
+                int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+                int x, y, xOrig, yOrig;
+                double angleRad = (Math.PI / 180) * angle;
+
+                if (nChan == 3) // imagem em RGB
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        for (x = 0; x < width; x++)
+                        {
+                            xOrig = (int)Math.Round(((x - (width / 2)) * Math.Cos(angleRad)) - (((height / 2) - y) * Math.Sin(angleRad)) + (width / 2));
+                            yOrig = (int)Math.Round((height / 2) - ((x - (width / 2)) * Math.Sin(angleRad)) - (((height / 2) - y) * Math.Cos(angleRad)));
+
+                            if ((yOrig >= 0) && (xOrig >= 0) && (yOrig < height) && (xOrig < width))
+                            {
+
+                                dataPtr[0] = (dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[0];
+                                dataPtr[1] = (dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[1];
+                                dataPtr[2] = (dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[2];
+                            }
+                            else
+                            {
+                                dataPtr[0] = 0;
+                                dataPtr[1] = 0;
+                                dataPtr[2] = 0;
+                            }
+
+
+                            // avança apontador para próximo pixel
+                            dataPtr += nChan;
+                        }
+                        //no fim da linha avança alinhamento (padding)
+                        dataPtr += padding;
+                    }
+                }
+            }
         }
     }
 }
