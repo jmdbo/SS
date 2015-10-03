@@ -15,6 +15,7 @@ namespace SS_OpenCV
     {
         Image<Bgr, Byte> img = null; // imagem corrente
         Image<Bgr, Byte> imgUndo = null; // imagem backup - UNDO
+        int mouseX = 0, mouseY=0;
         string title_bak = "";
 
         public MainForm()
@@ -250,6 +251,7 @@ namespace SS_OpenCV
             catch (Exception)
             {
                 MessageBox.Show("Please insert integer values!");
+                Cursor = Cursors.Default; // cursor normal
                 return;
             }
 
@@ -283,6 +285,7 @@ namespace SS_OpenCV
             catch (Exception)
             {
                 MessageBox.Show("Please insert float values!");
+                Cursor = Cursors.Default; // cursor normal
                 return;
             }
 
@@ -297,6 +300,44 @@ namespace SS_OpenCV
             Cursor = Cursors.Default; // cursor normal
             MessageBox.Show((d2 - d1).ToString());
 
+        }
+
+        private void zoomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            float Zoom;
+
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+
+            InputBox frame = new InputBox("Zoom value");
+            frame.ShowDialog();
+            Cursor = Cursors.WaitCursor; // cursor relogio
+            try
+            {
+                Zoom = float.Parse(frame.ValueTextBox.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please insert float values!");
+                return;
+            }
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
+            ImageClass.Zoom(imgUndo, img, Zoom, mouseX, mouseY);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+        }
+
+        private void ImageViewer_MouseClick(object sender, MouseEventArgs e)
+        {
+            mouseX = e.X;
+            mouseY = e.Y;
         }
     }
 }

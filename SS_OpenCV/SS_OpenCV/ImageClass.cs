@@ -267,12 +267,15 @@ namespace SS_OpenCV
                 MIplImage n = imgUndo.MIplImage;
                 byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
                 byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+                byte* dataOrigPtr;
                 int width = img.Width;
                 int height = img.Height;
                 int nChan = m.nChannels; // numero de canais 3
                 int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
                 int x, y, xOrig, yOrig;
                 double angleRad = (Math.PI / 180) * angle;
+                double cos = Math.Cos(angleRad);
+                double sin = Math.Sin(angleRad);
 
                 if (nChan == 3) // imagem em RGB
                 {
@@ -280,12 +283,57 @@ namespace SS_OpenCV
                     {
                         for (x = 0; x < width; x++)
                         {
-                            xOrig = (int)Math.Round(((x - (width / 2)) * Math.Cos(angleRad)) - (((height / 2) - y) * Math.Sin(angleRad)) + (width / 2));
-                            yOrig = (int)Math.Round((height / 2) - ((x - (width / 2)) * Math.Sin(angleRad)) - (((height / 2) - y) * Math.Cos(angleRad)));
+                            xOrig = (int)Math.Round(((x - (width / 2)) * cos) - (((height / 2) - y) * sin) + (width / 2));
+                            yOrig = (int)Math.Round((height / 2) - ((x - (width / 2)) * sin) - (((height / 2) - y) * cos));
+                            dataOrigPtr = dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan;
 
                             if ((yOrig >= 0) && (xOrig >= 0) && (yOrig < height) && (xOrig < width))
                             {
+                                dataPtr[0] = dataOrigPtr[0];
+                                dataPtr[1] = dataOrigPtr[1];
+                                dataPtr[2] = dataOrigPtr[2];
+                            }
+                            else
+                            {
+                                dataPtr[0] = 0;
+                                dataPtr[1] = 0;
+                                dataPtr[2] = 0;
+                            }
+                            // avança apontador para próximo pixel
+                            dataPtr += nChan;
+                        }
+                        //no fim da linha avança alinhamento (padding)
+                        dataPtr += padding;
+                    }
+                }
+            }
+        }
 
+        internal static void Zoom(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img, float zoom, int mouseX, int mouseY)
+        {
+            unsafe
+            {
+                MIplImage m = img.MIplImage;
+                MIplImage n = imgUndo.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+                byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels; // numero de canais 3
+                int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+                int x, y, xOrig, yOrig;
+
+                if (nChan == 3) // imagem em RGB
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        for (x = 0; x < width; x++)
+                        {
+                            xOrig = (int)Math.Round(x / zoom)+mouseX;
+                            yOrig = (int)Math.Round(y / zoom)+mouseY;
+
+                            if ((yOrig >= 0) && (xOrig >= 0) && (yOrig < height) && (xOrig < width))
+                            {
                                 dataPtr[0] = (dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[0];
                                 dataPtr[1] = (dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[1];
                                 dataPtr[2] = (dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[2];
@@ -296,8 +344,6 @@ namespace SS_OpenCV
                                 dataPtr[1] = 0;
                                 dataPtr[2] = 0;
                             }
-
-
                             // avança apontador para próximo pixel
                             dataPtr += nChan;
                         }
