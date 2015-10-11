@@ -342,10 +342,13 @@ namespace SS_OpenCV
                                     xOrig = x - size + xFilter;
                                     if (yOrig < 0)
                                         yOrig = 0;
-
-
+                                    if (yOrig >= height)
+                                        yOrig = height - 1;
+                                    
                                     if (xOrig < 0)
                                         xOrig = 0;
+                                    if (xOrig >= width)
+                                        xOrig = width - 1;
 
                                     dataOrigPtr = dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan;
                                     sum[0] = sum[0] + (matrix[xFilter + (yFilter * size)]) * dataOrigPtr[0];

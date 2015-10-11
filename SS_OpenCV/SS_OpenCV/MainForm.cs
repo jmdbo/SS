@@ -358,6 +358,10 @@ namespace SS_OpenCV
         {
             int[] matrix;
             int weight;
+
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+
             WeightMatrixBox frame = new WeightMatrixBox();
             if(frame.ShowDialog() == DialogResult.OK){
 
