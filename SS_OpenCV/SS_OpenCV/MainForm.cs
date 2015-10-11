@@ -334,6 +334,101 @@ namespace SS_OpenCV
             MessageBox.Show((d2 - d1).ToString());
         }
 
+        private void x3MeanNoiseReductionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void nonUniformToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int[] matrix;
+            int weight;
+            WeightMatrixBox frame = new WeightMatrixBox();
+            if(frame.ShowDialog() == DialogResult.OK){
+                if (frame.comboBox1.SelectedIndex == 0)
+                {
+                    matrix = new int[9];
+                    try
+                    {
+                        matrix[0] = int.Parse(frame.matrixBox17.Text);
+                        matrix[1] = int.Parse(frame.matrixBox18.Text);
+                        matrix[2] = int.Parse(frame.matrixBox19.Text);
+                        matrix[3] = int.Parse(frame.matrixBox24.Text);
+                        matrix[4] = int.Parse(frame.matrixBox25.Text);
+                        matrix[5] = int.Parse(frame.matrixBox26.Text);
+                        matrix[6] = int.Parse(frame.matrixBox31.Text);
+                        matrix[7] = int.Parse(frame.matrixBox32.Text);
+                        matrix[8] = int.Parse(frame.matrixBox33.Text);
+                        weight = int.Parse(frame.weightBox.Text);
+                        ImageClass.x3nonlinearfilter(imgUndo, img, matrix, weight, 3);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error! Coeficients must be integers!\n"+ex.Message);
+                    }            
+
+
+                } else if (frame.comboBox1.SelectedIndex == 1)
+                {
+                    matrix = new int[25];
+                } else if (frame.comboBox1.SelectedIndex == 2)
+                {
+                    matrix = new int[49];
+                    matrix[0] = int.Parse(frame.matrixBox1.Text);
+                    matrix[1] = int.Parse(frame.matrixBox2.Text);
+                    matrix[2] = int.Parse(frame.matrixBox3.Text);
+                    matrix[3] = int.Parse(frame.matrixBox4.Text);
+                    matrix[4] = int.Parse(frame.matrixBox5.Text);
+                    matrix[5] = int.Parse(frame.matrixBox6.Text);
+                    matrix[6] = int.Parse(frame.matrixBox7.Text);
+                    matrix[7] = int.Parse(frame.matrixBox8.Text);
+                    matrix[8] = int.Parse(frame.matrixBox9.Text);
+                    matrix[9] = int.Parse(frame.matrixBox10.Text);
+                    matrix[10] = int.Parse(frame.matrixBox11.Text);
+                    matrix[11] = int.Parse(frame.matrixBox12.Text);
+                    matrix[12] = int.Parse(frame.matrixBox13.Text);
+                    matrix[13] = int.Parse(frame.matrixBox14.Text);
+                    matrix[14] = int.Parse(frame.matrixBox15.Text);
+                    matrix[15] = int.Parse(frame.matrixBox16.Text);
+                    matrix[16] = int.Parse(frame.matrixBox17.Text);
+                    matrix[17] = int.Parse(frame.matrixBox18.Text);
+                    matrix[18] = int.Parse(frame.matrixBox19.Text);
+                    matrix[19] = int.Parse(frame.matrixBox20.Text);
+                    matrix[20] = int.Parse(frame.matrixBox21.Text);
+                    matrix[21] = int.Parse(frame.matrixBox22.Text);
+                    matrix[22] = int.Parse(frame.matrixBox23.Text);
+                    matrix[23] = int.Parse(frame.matrixBox24.Text);
+                    matrix[24] = int.Parse(frame.matrixBox25.Text);
+                    matrix[25] = int.Parse(frame.matrixBox26.Text);
+                    matrix[26] = int.Parse(frame.matrixBox27.Text);
+                    matrix[27] = int.Parse(frame.matrixBox28.Text);
+                    matrix[28] = int.Parse(frame.matrixBox29.Text);
+                    matrix[29] = int.Parse(frame.matrixBox30.Text);
+                    matrix[30] = int.Parse(frame.matrixBox31.Text);
+                    matrix[31] = int.Parse(frame.matrixBox32.Text);
+                    matrix[32] = int.Parse(frame.matrixBox33.Text);
+                    matrix[33] = int.Parse(frame.matrixBox34.Text);
+                    matrix[34] = int.Parse(frame.matrixBox35.Text);
+                    matrix[35] = int.Parse(frame.matrixBox36.Text);
+                    matrix[36] = int.Parse(frame.matrixBox37.Text);
+                    matrix[37] = int.Parse(frame.matrixBox38.Text);
+                    matrix[38] = int.Parse(frame.matrixBox39.Text);
+                    matrix[39] = int.Parse(frame.matrixBox40.Text);
+                    matrix[40] = int.Parse(frame.matrixBox41.Text);
+                    matrix[41] = int.Parse(frame.matrixBox42.Text);
+                    matrix[42] = int.Parse(frame.matrixBox43.Text);
+                    matrix[43] = int.Parse(frame.matrixBox44.Text);
+                    matrix[44] = int.Parse(frame.matrixBox45.Text);
+                    matrix[45] = int.Parse(frame.matrixBox46.Text);
+                    matrix[46] = int.Parse(frame.matrixBox47.Text);
+                    matrix[47] = int.Parse(frame.matrixBox48.Text);
+                    matrix[48] = int.Parse(frame.matrixBox49.Text);
+
+
+                }
+            }
+        }
+
         private void ImageViewer_MouseClick(object sender, MouseEventArgs e)
         {
             mouseX = e.X;

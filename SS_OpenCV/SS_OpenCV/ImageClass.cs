@@ -309,6 +309,46 @@ namespace SS_OpenCV
             }
         }
 
+        internal static void x3nonlinearfilter(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img, int[] matrix, int weight,int size)
+        {
+            unsafe{
+                MIplImage m = img.MIplImage;
+                MIplImage n = imgUndo.MIplImage;
+                byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+                byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+                int width = img.Width;
+                int height = img.Height;
+                int nChan = m.nChannels; // numero de canais 3
+                int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+                int x, y, xOrig, yOrig;
+
+                if (nChan == 3) // imagem em RGB
+                {
+                    for (y = 0; y < height; y++)
+                    {
+                        for (x = 0; x < width; x++)
+                        {
+                            for (int xFilter = 0; xFilter < size; xFilter++)
+                            {
+                                for (int yFilter = 0; yFilter < size; yFilter++)
+                                {
+
+                                }
+                            }
+
+                            
+                            // avança apontador para próximo pixel
+                            dataPtr += nChan;
+                        }
+                        //no fim da linha avança alinhamento (padding)
+                        dataPtr += padding;
+                    }
+                }
+            }
+            
+
+        }
+
         internal static void Zoom(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img, float zoom, int mouseX, int mouseY)
         {
             unsafe
