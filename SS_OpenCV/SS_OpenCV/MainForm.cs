@@ -336,7 +336,22 @@ namespace SS_OpenCV
 
         private void x3MeanNoiseReductionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            float Zoom;
+
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+
+            InputBox frame = new InputBox("Zoom value");
+                        //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+            int[] matrix = new int[9] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            ImageClass.x3nonlinearfilter(imgUndo, img, matrix, 9, 3);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
         }
 
         private void nonUniformToolStripMenuItem_Click(object sender, EventArgs e)
@@ -345,6 +360,10 @@ namespace SS_OpenCV
             int weight;
             WeightMatrixBox frame = new WeightMatrixBox();
             if(frame.ShowDialog() == DialogResult.OK){
+
+                imgUndo = img.Copy();
+                DateTime d1 = DateTime.Now;
+
                 if (frame.comboBox1.SelectedIndex == 0)
                 {
                     matrix = new int[9];
@@ -426,7 +445,11 @@ namespace SS_OpenCV
 
 
                 }
-            }
+                ImageViewer.Refresh(); // atualiza imagem no ecrã
+                DateTime d2 = DateTime.Now;
+                Cursor = Cursors.Default; // cursor normal
+                MessageBox.Show((d2 - d1).ToString());
+            }            
         }
 
         private void ImageViewer_MouseClick(object sender, MouseEventArgs e)

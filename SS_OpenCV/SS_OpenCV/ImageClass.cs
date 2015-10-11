@@ -316,11 +316,14 @@ namespace SS_OpenCV
                 MIplImage n = imgUndo.MIplImage;
                 byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
                 byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+                byte* dataOrigPtr;
                 int width = img.Width;
                 int height = img.Height;
                 int nChan = m.nChannels; // numero de canais 3
                 int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
                 int x, y, xOrig, yOrig;
+                int[] sum = new int[3] { 0, 0, 0};
+                //byte[] mean = new byte[3];
 
                 if (nChan == 3) // imagem em RGB
                 {
@@ -328,15 +331,31 @@ namespace SS_OpenCV
                     {
                         for (x = 0; x < width; x++)
                         {
+                            sum[0] = 0;
+                            sum[1] = 0;
+                            sum[2] = 0;
                             for (int xFilter = 0; xFilter < size; xFilter++)
                             {
                                 for (int yFilter = 0; yFilter < size; yFilter++)
                                 {
+                                    yOrig = y - size + yFilter;
+                                    xOrig = x - size + xFilter;
+                                    if (yOrig < 0)
+                                        yOrig = 0;
 
+
+                                    if (xOrig < 0)
+                                        xOrig = 0;
+
+                                    dataOrigPtr = dataUndoPtr + (yOrig) * n.widthStep + (xOrig) * nChan;
+                                    sum[0] = sum[0] + (matrix[xFilter + (yFilter * size)]) * dataOrigPtr[0];
+                                    sum[1] = sum[1] + (matrix[xFilter + (yFilter * size)]) * dataOrigPtr[1];
+                                    sum[2] = sum[2] + (matrix[xFilter + (yFilter * size)]) * dataOrigPtr[2];
                                 }
                             }
-
-                            
+                            dataPtr[0] = (byte) (sum[0] / (weight));
+                            dataPtr[1] = (byte) (sum[1] / (weight));
+                            dataPtr[2] = (byte) (sum[2] / (weight));
                             // avança apontador para próximo pixel
                             dataPtr += nChan;
                         }
