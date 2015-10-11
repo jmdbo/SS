@@ -309,7 +309,7 @@ namespace SS_OpenCV
             }
         }
 
-        internal static void x3nonlinearfilter(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img, int[] matrix, int weight,int size)
+        internal static void nonlinearfilter(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img, int[] matrix, int weight,int size)
         {
             unsafe{
                 MIplImage m = img.MIplImage;
