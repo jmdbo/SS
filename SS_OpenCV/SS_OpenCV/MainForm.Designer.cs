@@ -54,12 +54,13 @@
             this.rotationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filtersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x3MeanNoiseReductionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nonUniformToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoZoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ImageViewer = new System.Windows.Forms.PictureBox();
-            this.x3MeanNoiseReductionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nonUniformToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sobelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageViewer)).BeginInit();
@@ -236,21 +237,21 @@
             // translationToolStripMenuItem
             // 
             this.translationToolStripMenuItem.Name = "translationToolStripMenuItem";
-            this.translationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.translationToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.translationToolStripMenuItem.Text = "Translation";
             this.translationToolStripMenuItem.Click += new System.EventHandler(this.translationToolStripMenuItem_Click);
             // 
             // rotationToolStripMenuItem
             // 
             this.rotationToolStripMenuItem.Name = "rotationToolStripMenuItem";
-            this.rotationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rotationToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.rotationToolStripMenuItem.Text = "Rotation";
             this.rotationToolStripMenuItem.Click += new System.EventHandler(this.rotationToolStripMenuItem_Click);
             // 
             // zoomToolStripMenuItem
             // 
             this.zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
-            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.zoomToolStripMenuItem.Text = "Zoom";
             this.zoomToolStripMenuItem.Click += new System.EventHandler(this.zoomToolStripMenuItem_Click);
             // 
@@ -258,10 +259,25 @@
             // 
             this.filtersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.x3MeanNoiseReductionToolStripMenuItem,
-            this.nonUniformToolStripMenuItem});
+            this.nonUniformToolStripMenuItem,
+            this.sobelToolStripMenuItem});
             this.filtersToolStripMenuItem.Name = "filtersToolStripMenuItem";
             this.filtersToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.filtersToolStripMenuItem.Text = "Filters";
+            // 
+            // x3MeanNoiseReductionToolStripMenuItem
+            // 
+            this.x3MeanNoiseReductionToolStripMenuItem.Name = "x3MeanNoiseReductionToolStripMenuItem";
+            this.x3MeanNoiseReductionToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.x3MeanNoiseReductionToolStripMenuItem.Text = "3x3 Mean Noise Reduction";
+            this.x3MeanNoiseReductionToolStripMenuItem.Click += new System.EventHandler(this.x3MeanNoiseReductionToolStripMenuItem_Click);
+            // 
+            // nonUniformToolStripMenuItem
+            // 
+            this.nonUniformToolStripMenuItem.Name = "nonUniformToolStripMenuItem";
+            this.nonUniformToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.nonUniformToolStripMenuItem.Text = "Non Uniform";
+            this.nonUniformToolStripMenuItem.Click += new System.EventHandler(this.nonUniformToolStripMenuItem_Click);
             // 
             // autoZoomToolStripMenuItem
             // 
@@ -298,19 +314,12 @@
             this.ImageViewer.TabStop = false;
             this.ImageViewer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImageViewer_MouseClick);
             // 
-            // x3MeanNoiseReductionToolStripMenuItem
+            // sobelToolStripMenuItem
             // 
-            this.x3MeanNoiseReductionToolStripMenuItem.Name = "x3MeanNoiseReductionToolStripMenuItem";
-            this.x3MeanNoiseReductionToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.x3MeanNoiseReductionToolStripMenuItem.Text = "3x3 Mean Noise Reduction";
-            this.x3MeanNoiseReductionToolStripMenuItem.Click += new System.EventHandler(this.x3MeanNoiseReductionToolStripMenuItem_Click);
-            // 
-            // nonUniformToolStripMenuItem
-            // 
-            this.nonUniformToolStripMenuItem.Name = "nonUniformToolStripMenuItem";
-            this.nonUniformToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.nonUniformToolStripMenuItem.Text = "Non Uniform";
-            this.nonUniformToolStripMenuItem.Click += new System.EventHandler(this.nonUniformToolStripMenuItem_Click);
+            this.sobelToolStripMenuItem.Name = "sobelToolStripMenuItem";
+            this.sobelToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.sobelToolStripMenuItem.Text = "Sobel";
+            this.sobelToolStripMenuItem.Click += new System.EventHandler(this.sobelToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -366,6 +375,7 @@
         private System.Windows.Forms.ToolStripMenuItem redChannelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem x3MeanNoiseReductionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nonUniformToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sobelToolStripMenuItem;
     }
 }
 

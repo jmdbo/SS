@@ -333,6 +333,7 @@ namespace SS_OpenCV
                                 sum[2] = sum[2] + (matrix[xFilter + (yFilter * size)]) * dataOrigPtr[2];
                             }
                         }
+                    
                         dataPtr[0] = (byte) (sum[0] / (weight));
                         dataPtr[1] = (byte) (sum[1] / (weight));
                         dataPtr[2] = (byte) (sum[2] / (weight));
@@ -385,6 +386,89 @@ namespace SS_OpenCV
                     dataPtr += padding;
                 }
             }            
+        }
+
+        internal static unsafe void sobelfilter(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img, int size)
+        {
+
+            MIplImage m = img.MIplImage;
+            MIplImage n = imgUndo.MIplImage;
+            byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+            byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+            byte* dataOrigPtr;
+            byte*[] matriz = new byte*[9];
+            int width = img.Width;
+            int height = img.Height;
+            int nChan = m.nChannels; // numero de canais 3
+            int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+            int x, y;
+            int[] sum = new int[3] { 0, 0, 0 };
+            int[] sx = new int[3], sy = new int[3], s = new int[3];
+            //byte[] mean = new byte[3];
+
+            if (nChan == 3) // imagem em RGB
+            {
+                for (y = size/2; y < height-(size/2); y++)
+                {
+                    for (x = size/2; x < width-(size/2); x++)
+                    {
+                        sum[0] = 0;
+                        sum[1] = 0;
+                        sum[2] = 0;
+                        dataOrigPtr = dataUndoPtr + (y) * n.widthStep + (x) * nChan;
+                        sx[0] = (((dataOrigPtr - n.widthStep - nChan)[0] + (2 *((dataOrigPtr - nChan)[0])) + (dataOrigPtr + n.widthStep - nChan)[0]) - 
+                            ((dataOrigPtr - n.widthStep - nChan)[0] + (2 *((dataOrigPtr - nChan)[0])) + (dataOrigPtr + n.widthStep - nChan)[0]));
+                        sx[1] = (((dataOrigPtr - n.widthStep - nChan)[1] + (2 * ((dataOrigPtr - nChan)[1])) + (dataOrigPtr + n.widthStep - nChan)[1]) -
+                           ((dataOrigPtr - n.widthStep - nChan)[1] + (2 * ((dataOrigPtr - nChan)[1])) + (dataOrigPtr + n.widthStep - nChan)[1]));
+                        sx[2] = (((dataOrigPtr - n.widthStep - nChan)[2] + (2 * ((dataOrigPtr - nChan)[2])) + (dataOrigPtr + n.widthStep - nChan)[2]) -
+                           ((dataOrigPtr - n.widthStep - nChan)[2] + (2 * ((dataOrigPtr - nChan)[2])) + (dataOrigPtr + n.widthStep - nChan)[2]));
+
+                        sy[0] = ((dataOrigPtr - nChan + n.widthStep)[0] + (2 * (dataOrigPtr + n.widthStep)[0]) + (dataOrigPtr + nChan + n.widthStep)[0]) - 
+                            ((dataOrigPtr - n.widthStep - nChan)[0] + (2*((dataOrigPtr - n.widthStep)[0])) + ((dataOrigPtr - n.widthStep + nChan)[0])) ;
+                        sy[1] = ((dataOrigPtr - nChan + n.widthStep)[1] + (2 * (dataOrigPtr + n.widthStep)[1]) + (dataOrigPtr + nChan + n.widthStep)[1]) -
+                            ((dataOrigPtr - n.widthStep - nChan)[1] + (2 * ((dataOrigPtr - n.widthStep)[1])) + ((dataOrigPtr - n.widthStep + nChan)[1]));
+                        sy[2] = ((dataOrigPtr - nChan + n.widthStep)[2] + (2 * (dataOrigPtr + n.widthStep)[2]) + (dataOrigPtr + nChan + n.widthStep)[2]) -
+                            ((dataOrigPtr - n.widthStep - nChan)[2] + (2 * ((dataOrigPtr - n.widthStep)[2])) + ((dataOrigPtr - n.widthStep + nChan)[2]));
+
+                        if (sy[0] < 0)
+                            sy[0] = 0 - sy[0];
+                        if (sy[1] < 0)
+                            sy[1] = 0 - sy[1];
+                        if (sy[2] < 0)
+                            sy[2] = 0 - sy[2];
+
+                        if (sx[0] < 0)
+                            sx[0] = 0 - sx[0];
+                        if (sx[1] < 0)
+                            sx[1] = 0 - sx[1];
+                        if (sx[2] < 0)
+                            sx[2] = 0 - sx[2];
+
+                        if (sy[0] > 255)
+                            sy[0] = 255;
+                        if (sy[1] > 255)
+                            sy[1] = 255;
+                        if (sy[2] > 255)
+                            sy[2] = 255;
+
+                        if (sx[0] > 255)
+                            sx[0] = 255;
+                        if (sx[1] > 255)
+                            sx[1] = 255;
+                        if (sx[2] > 255)
+                            sx[2] = 255;
+
+                        dataPtr[0] =(byte) (sx[0] + sy[0]);
+                        dataPtr[1] =(byte) (sx[1] + sy[1]);
+                        dataPtr[2] =(byte) (sx[2] + sy[2]);
+
+                        // avança apontador para próximo pixel
+                        dataPtr += nChan;
+                    }
+                    //no fim da linha avança alinhamento (padding)
+                    dataPtr += padding;
+                }
+            }
         }
     }
 }
