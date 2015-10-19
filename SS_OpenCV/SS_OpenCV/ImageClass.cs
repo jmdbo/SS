@@ -396,7 +396,7 @@ namespace SS_OpenCV
             byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
             byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
             byte* dataOrigPtr;
-            byte*[] matriz = new byte*[9];
+
             int width = img.Width;
             int height = img.Height;
             int nChan = m.nChannels; // numero de canais 3
@@ -404,10 +404,12 @@ namespace SS_OpenCV
             int x, y;
             int[] sum = new int[3] { 0, 0, 0 };
             int[] sx = new int[3], sy = new int[3], s = new int[3];
-            //byte[] mean = new byte[3];
-
+            
             if (nChan == 3) // imagem em RGB
             {
+                //Não processando as bordas temos de avançar uma linha e uma coluna;
+                dataPtr += nChan; //Avança uma coluna
+                dataPtr += n.widthStep; //Avança uma linha
                 for (y = size/2; y < height-(size/2); y++)
                 {
                     for (x = size/2; x < width-(size/2); x++)
@@ -417,11 +419,11 @@ namespace SS_OpenCV
                         sum[2] = 0;
                         dataOrigPtr = dataUndoPtr + (y) * n.widthStep + (x) * nChan;
                         sx[0] = (((dataOrigPtr - n.widthStep - nChan)[0] + (2 *((dataOrigPtr - nChan)[0])) + (dataOrigPtr + n.widthStep - nChan)[0]) - 
-                            ((dataOrigPtr - n.widthStep - nChan)[0] + (2 *((dataOrigPtr - nChan)[0])) + (dataOrigPtr + n.widthStep - nChan)[0]));
+                            ((dataOrigPtr - n.widthStep + nChan)[0] + (2 *((dataOrigPtr + nChan)[0])) + (dataOrigPtr + n.widthStep + nChan)[0]));
                         sx[1] = (((dataOrigPtr - n.widthStep - nChan)[1] + (2 * ((dataOrigPtr - nChan)[1])) + (dataOrigPtr + n.widthStep - nChan)[1]) -
-                           ((dataOrigPtr - n.widthStep - nChan)[1] + (2 * ((dataOrigPtr - nChan)[1])) + (dataOrigPtr + n.widthStep - nChan)[1]));
+                           ((dataOrigPtr - n.widthStep + nChan)[1] + (2 * ((dataOrigPtr + nChan)[1])) + (dataOrigPtr + n.widthStep + nChan)[1]));
                         sx[2] = (((dataOrigPtr - n.widthStep - nChan)[2] + (2 * ((dataOrigPtr - nChan)[2])) + (dataOrigPtr + n.widthStep - nChan)[2]) -
-                           ((dataOrigPtr - n.widthStep - nChan)[2] + (2 * ((dataOrigPtr - nChan)[2])) + (dataOrigPtr + n.widthStep - nChan)[2]));
+                           ((dataOrigPtr - n.widthStep + nChan)[2] + (2 * ((dataOrigPtr + nChan)[2])) + (dataOrigPtr + n.widthStep + nChan)[2]));
 
                         sy[0] = ((dataOrigPtr - nChan + n.widthStep)[0] + (2 * (dataOrigPtr + n.widthStep)[0]) + (dataOrigPtr + nChan + n.widthStep)[0]) - 
                             ((dataOrigPtr - n.widthStep - nChan)[0] + (2*((dataOrigPtr - n.widthStep)[0])) + ((dataOrigPtr - n.widthStep + nChan)[0])) ;
@@ -462,6 +464,101 @@ namespace SS_OpenCV
                         dataPtr[1] =(byte) (sx[1] + sy[1]);
                         dataPtr[2] =(byte) (sx[2] + sy[2]);
 
+                        // avança apontador para próximo pixel
+                        dataPtr += nChan;
+                    }
+                    //no fim da linha avança alinhamento (padding)
+                    dataPtr += padding + 2*nChan; //Avança uma coluna no fim e no inicio
+                }
+            }
+        }
+
+        internal static unsafe void medianFilter(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img, int size)
+        {
+            MIplImage m = img.MIplImage;
+            MIplImage n = imgUndo.MIplImage;
+            byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+            byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+            byte* dataOrigPtr;
+            int width = img.Width;
+            int height = img.Height;
+            int nChan = m.nChannels; // numero de canais 3
+            int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+            int x, y, xOrig, yOrig, minDist, tempDist, xMinus, yMinus, xPlus,yPlus;
+
+            if (nChan == 3)
+            {
+                for (y = 0; y < height; y++)
+                {
+                    for (x = 0; x < width; x++)
+                    {
+                        minDist = int.MaxValue;
+                        for (int xFilter = 0; xFilter < (size); xFilter++)
+                        {
+                            for (int yFilter = 0; yFilter < size; yFilter++)
+                            {
+                                yOrig = y - (size / 2) + yFilter;
+                                xOrig = x - (size / 2) + xFilter;
+                                if (yOrig < 0)
+                                    yOrig = 0;
+                                if (yOrig >= height)
+                                    yOrig = height - 1;
+
+                                if (xOrig < 0)
+                                    xOrig = 0;
+                                if (xOrig >= width)
+                                    xOrig = width - 1;
+                                xPlus = x + 1;
+                                yPlus = y + 1;
+                                xMinus = x - 1;
+                                yMinus = y - 1;
+                                if (xMinus < 0)
+                                    xMinus = 0;
+                                if (yMinus < 0)
+                                    yMinus = 0;
+                                if (yPlus >= height)
+                                    yPlus = height - 1;
+                                if (xPlus >= width)
+                                    xPlus = width - 1;
+
+
+                                tempDist = 
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yMinus) * n.widthStep + (xMinus) * nChan)[0]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yMinus) * n.widthStep + (x + 0) * nChan)[0]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yMinus) * n.widthStep + (xPlus) * nChan)[0]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (y + 0) * n.widthStep + (xMinus) * nChan)[0]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (y + 0) * n.widthStep + (x + 0) * nChan)[0]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (y + 0) * n.widthStep + (xPlus) * nChan)[0]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yPlus) * n.widthStep + (xMinus) * nChan)[0]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yPlus) * n.widthStep + (x + 0) * nChan)[0]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yPlus) * n.widthStep + (xPlus) * nChan)[0]) +
+
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yMinus) * n.widthStep + (xMinus) * nChan)[1]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yMinus) * n.widthStep + (x + 0) * nChan)[1]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yMinus) * n.widthStep + (xPlus) * nChan)[1]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (y + 0) * n.widthStep + (xMinus) * nChan)[1]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (y + 0) * n.widthStep + (x + 0) * nChan)[1]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (y + 0) * n.widthStep + (xPlus) * nChan)[1]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yPlus) * n.widthStep + (xMinus) * nChan)[1]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yPlus) * n.widthStep + (x + 0) * nChan)[1]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yPlus) * n.widthStep + (xPlus) * nChan)[1]) +
+
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yMinus) * n.widthStep + (xMinus) * nChan)[2]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yMinus) * n.widthStep + (x + 0) * nChan)[2]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yMinus) * n.widthStep + (xPlus) * nChan)[2]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (y + 0) * n.widthStep + (xMinus) * nChan)[2]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (y + 0) * n.widthStep + (x + 0) * nChan)[2]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (y + 0) * n.widthStep + (xPlus) * nChan)[2]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yPlus) * n.widthStep + (xMinus) * nChan)[2]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yPlus) * n.widthStep + (x + 0) * nChan)[2]) +
+                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yPlus) * n.widthStep + (xPlus) * nChan)[2]);
+                                if (tempDist < minDist)
+                                {
+                                    minDist = tempDist;
+                                }
+                            }
+                        }
+                        
                         // avança apontador para próximo pixel
                         dataPtr += nChan;
                     }
