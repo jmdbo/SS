@@ -485,6 +485,7 @@ namespace SS_OpenCV
             int nChan = m.nChannels; // numero de canais 3
             int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
             int x, y, xOrig, yOrig, minDist, tempDist, xMinus, yMinus, xPlus,yPlus;
+            byte[] value_med = new byte[3];
 
             if (nChan == 3)
             {
@@ -523,42 +524,50 @@ namespace SS_OpenCV
 
 
                                 tempDist = 
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yMinus) * n.widthStep + (xMinus) * nChan)[0]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yMinus) * n.widthStep + (x + 0) * nChan)[0]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yMinus) * n.widthStep + (xPlus) * nChan)[0]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (y + 0) * n.widthStep + (xMinus) * nChan)[0]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (y + 0) * n.widthStep + (x + 0) * nChan)[0]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (y + 0) * n.widthStep + (xPlus) * nChan)[0]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yPlus) * n.widthStep + (xMinus) * nChan)[0]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yPlus) * n.widthStep + (x + 0) * nChan)[0]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yPlus) * n.widthStep + (xPlus) * nChan)[0]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yMinus) * n.widthStep + (xMinus) * nChan)[0]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yMinus) * n.widthStep + (x + 0) * nChan)[0]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yMinus) * n.widthStep + (xPlus) * nChan)[0]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (y + 0) * n.widthStep + (xMinus) * nChan)[0]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (y + 0) * n.widthStep + (x + 0) * nChan)[0]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (y + 0) * n.widthStep + (xPlus) * nChan)[0]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yPlus) * n.widthStep + (xMinus) * nChan)[0]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yPlus) * n.widthStep + (x + 0) * nChan)[0]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0] - (dataUndoPtr + (yPlus) * n.widthStep + (xPlus) * nChan)[0]) +
 
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yMinus) * n.widthStep + (xMinus) * nChan)[1]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yMinus) * n.widthStep + (x + 0) * nChan)[1]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yMinus) * n.widthStep + (xPlus) * nChan)[1]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (y + 0) * n.widthStep + (xMinus) * nChan)[1]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (y + 0) * n.widthStep + (x + 0) * nChan)[1]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (y + 0) * n.widthStep + (xPlus) * nChan)[1]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yPlus) * n.widthStep + (xMinus) * nChan)[1]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yPlus) * n.widthStep + (x + 0) * nChan)[1]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yPlus) * n.widthStep + (xPlus) * nChan)[1]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yMinus) * n.widthStep + (xMinus) * nChan)[1]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yMinus) * n.widthStep + (x + 0) * nChan)[1]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yMinus) * n.widthStep + (xPlus) * nChan)[1]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (y + 0) * n.widthStep + (xMinus) * nChan)[1]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (y + 0) * n.widthStep + (x + 0) * nChan)[1]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (y + 0) * n.widthStep + (xPlus) * nChan)[1]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yPlus) * n.widthStep + (xMinus) * nChan)[1]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yPlus) * n.widthStep + (x + 0) * nChan)[1]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1] - (dataUndoPtr + (yPlus) * n.widthStep + (xPlus) * nChan)[1]) +
 
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yMinus) * n.widthStep + (xMinus) * nChan)[2]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yMinus) * n.widthStep + (x + 0) * nChan)[2]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yMinus) * n.widthStep + (xPlus) * nChan)[2]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (y + 0) * n.widthStep + (xMinus) * nChan)[2]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (y + 0) * n.widthStep + (x + 0) * nChan)[2]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (y + 0) * n.widthStep + (xPlus) * nChan)[2]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yPlus) * n.widthStep + (xMinus) * nChan)[2]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yPlus) * n.widthStep + (x + 0) * nChan)[2]) +
-                                    ((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yPlus) * n.widthStep + (xPlus) * nChan)[2]);
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yMinus) * n.widthStep + (xMinus) * nChan)[2]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yMinus) * n.widthStep + (x + 0) * nChan)[2]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yMinus) * n.widthStep + (xPlus) * nChan)[2]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (y + 0) * n.widthStep + (xMinus) * nChan)[2]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (y + 0) * n.widthStep + (x + 0) * nChan)[2]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (y + 0) * n.widthStep + (xPlus) * nChan)[2]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yPlus) * n.widthStep + (xMinus) * nChan)[2]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yPlus) * n.widthStep + (x + 0) * nChan)[2]) +
+                                    Math.Abs((dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2] - (dataUndoPtr + (yPlus) * n.widthStep + (xPlus) * nChan)[2]);
                                 if (tempDist < minDist)
                                 {
                                     minDist = tempDist;
+                                    value_med[0] = (dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[0];
+                                    value_med[1] = (dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[1];
+                                    value_med[2] = (dataUndoPtr + (yOrig) * n.widthStep + xOrig * nChan)[2];
+
                                 }
                             }
                         }
-                        
+                        dataPtr[0] = value_med[0];
+                        dataPtr[1] = value_med[1];
+                        dataPtr[2] = value_med[2];
+
+
                         // avança apontador para próximo pixel
                         dataPtr += nChan;
                     }
