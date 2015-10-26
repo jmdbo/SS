@@ -529,6 +529,44 @@ namespace SS_OpenCV
             MessageBox.Show((d2 - d1).ToString());
         }
 
+        private void histogramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int[] intensity = new int[256];
+            for (int i = 0; i < 256; i++)
+            {
+                intensity[i] = 0;
+            }
+            int[] red = new int[256];
+            for (int i = 0; i < 256; i++)
+            {
+                intensity[i] = 0;
+            }
+            int[] green = new int[256];
+            for (int i = 0; i < 256; i++)
+            {
+                intensity[i] = 0;
+            }
+            int[] blue = new int[256];
+            for (int i = 0; i < 256; i++)
+            {
+                intensity[i] = 0;
+            }
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+
+            Cursor = Cursors.WaitCursor; // cursor relogio                                         
+            DateTime d1 = DateTime.Now;
+            ImageClass.histogram(img, intensity, red, green, blue, 3);
+            Histogram histForm = new Histogram(intensity, red, green, blue);
+            histForm.Show();
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+
+        }
+
         private void ImageViewer_MouseClick(object sender, MouseEventArgs e)
         {
             mouseX = e.X;

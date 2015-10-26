@@ -62,6 +62,7 @@
             this.autoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ImageViewer = new System.Windows.Forms.PictureBox();
+            this.histogramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageViewer)).BeginInit();
@@ -142,6 +143,7 @@
             this.colorToolStripMenuItem,
             this.transformsToolStripMenuItem,
             this.filtersToolStripMenuItem,
+            this.histogramToolStripMenuItem,
             this.autoZoomToolStripMenuItem});
             this.imageToolStripMenuItem.Name = "imageToolStripMenuItem";
             this.imageToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
@@ -155,7 +157,7 @@
             this.fastNegativeToolStripMenuItem,
             this.oneChannelGreyToolStripMenuItem});
             this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
-            this.colorToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.colorToolStripMenuItem.Text = "Color";
             // 
             // convertToToolStripMenuItem
@@ -232,7 +234,7 @@
             this.rotationToolStripMenuItem,
             this.zoomToolStripMenuItem});
             this.transformsToolStripMenuItem.Name = "transformsToolStripMenuItem";
-            this.transformsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.transformsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.transformsToolStripMenuItem.Text = "Transforms";
             // 
             // translationToolStripMenuItem
@@ -264,7 +266,7 @@
             this.sobelToolStripMenuItem,
             this.medianToolStripMenuItem});
             this.filtersToolStripMenuItem.Name = "filtersToolStripMenuItem";
-            this.filtersToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.filtersToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.filtersToolStripMenuItem.Text = "Filters";
             // 
             // x3MeanNoiseReductionToolStripMenuItem
@@ -299,7 +301,7 @@
             // 
             this.autoZoomToolStripMenuItem.CheckOnClick = true;
             this.autoZoomToolStripMenuItem.Name = "autoZoomToolStripMenuItem";
-            this.autoZoomToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.autoZoomToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.autoZoomToolStripMenuItem.Text = "Auto Zoom";
             this.autoZoomToolStripMenuItem.Click += new System.EventHandler(this.autoZoomToolStripMenuItem_Click);
             // 
@@ -329,6 +331,13 @@
             this.ImageViewer.TabIndex = 6;
             this.ImageViewer.TabStop = false;
             this.ImageViewer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImageViewer_MouseClick);
+            // 
+            // histogramToolStripMenuItem
+            // 
+            this.histogramToolStripMenuItem.Name = "histogramToolStripMenuItem";
+            this.histogramToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.histogramToolStripMenuItem.Text = "Histogram";
+            this.histogramToolStripMenuItem.Click += new System.EventHandler(this.histogramToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -386,6 +395,7 @@
         private System.Windows.Forms.ToolStripMenuItem nonUniformToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sobelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem medianToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem histogramToolStripMenuItem;
     }
 }
 
