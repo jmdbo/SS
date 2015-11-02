@@ -577,6 +577,142 @@ namespace SS_OpenCV
             }
         }
 
+        internal static unsafe void otsu(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img)
+        {
+            MIplImage m = img.MIplImage;
+            byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+            byte average;
+            int[] intensity = new int[256];
+            int width = img.Width;
+            int height = img.Height;
+            int nChan = m.nChannels; // numero de canais 3
+            int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+            int x, y;
+
+            int sum_intens = 0, Threshold;
+            int maxT = 0, Tval = 0, aux = 0;
+            float q1, q2, u1, u2, sigma;
+            float[] intens_prob = new float[256];
+
+            if (nChan == 3) // imagem em RGB
+            {
+                for (y = 0; y < height; y++)
+                {
+                    for (x = 0; x < width; x++)
+                    {
+                        intensity[(int)(dataPtr[0] + dataPtr[1] + dataPtr[2] + 0.5) / 3]++;
+
+                        // avança apontador para próximo pixel
+                        dataPtr += nChan;
+                    }
+                    //no fim da linha avança alinhamento (padding)
+                    dataPtr += padding;
+                }
+            }
+
+            if (nChan == 3) // imagem em RGB
+            {
+                for (y = 0; y < height; y++)
+                {
+                    for (x = 0; x < width; x++)
+                    {
+                        for (aux = 0; aux < 256; aux++)
+                        {
+                            sum_intens += intensity[aux];
+
+                            for (aux = 0; aux < 256; aux++)
+                                intens_prob[aux] = intensity[aux] / sum_intens;
+
+                            for (Threshold = 0; Threshold < 256; Threshold++)
+                            {
+                                q1 = q2 = u1 = u2 = 0;
+
+                                for (aux = 0; aux < 256; aux++)
+                                    q1 += intens_prob[aux];
+
+                                q2 = 1 - q1;
+
+                                if (q1 * q2 != 0)
+                                {
+                                    for (aux = 0; aux < Threshold + 1; aux++)
+                                        u1 += intensity[aux] * intens_prob[aux];
+                                    u1 = u1 / q1;
+
+                                    for (aux = Threshold + 1; aux < 256; aux++)
+                                        u2 += intensity[aux] * intens_prob[aux];
+                                    u2 = u2 / q2;
+
+                                    sigma = q1 * q2 * (u1 - u2) * (u1 - u2);
+
+                                    if (sigma > maxT)
+                                    {
+                                        sigma = maxT;
+                                        Tval = Threshold;
+                                    }
+                                }
+                            }
+                            // avança apontador para próximo pixel
+                            dataPtr += nChan;
+                        }
+                        //no fim da linha avança alinhamento (padding)
+                        dataPtr += padding;
+                    }
+                }
+            }
+
+            binar(imgUndo, img, Tval);
+        }
+
+        internal static unsafe void binar(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img, int CutValue)
+        {
+            MIplImage m = img.MIplImage;
+            byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+            byte blue, green, red, average;
+
+            int width = img.Width;
+            int height = img.Height;
+            int nChan = m.nChannels; // numero de canais 3
+            int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+            int x, y;
+
+            if (nChan == 3) // imagem em RGB
+            {
+                for (y = 0; y < height; y++)
+                {
+                    for (x = 0; x < width; x++)
+                    {
+                        //obtém as 3 componentes
+                        blue = dataPtr[0];
+                        green = dataPtr[1];
+                        red = dataPtr[2];
+
+                        // converte para cinza
+                        average = (byte)(((int)blue + green + red) / 3);
+
+                        if (average < CutValue)
+                        {
+                            dataPtr[0] = 0;
+                            dataPtr[1] = 0;
+                            dataPtr[2] = 0;
+                        }
+
+                        else
+                        {
+                            dataPtr[0] = 255;
+                            dataPtr[1] = 255;
+                            dataPtr[2] = 255;
+                        }
+
+                        // avança apontador para próximo pixel
+                        dataPtr += nChan;
+                    }
+
+                    //no fim da linha avança alinhamento (padding)
+                    dataPtr += padding;
+                }
+            }
+        }
+
         internal static unsafe void histogram(Image<Bgr, byte> img, int[] intensity, int[] red, int[] green, int[] blue, int v)
         {
             MIplImage m = img.MIplImage;

@@ -44,14 +44,14 @@
             this.zedGraphControl1.ScrollMinX = 0D;
             this.zedGraphControl1.ScrollMinY = 0D;
             this.zedGraphControl1.ScrollMinY2 = 0D;
-            this.zedGraphControl1.Size = new System.Drawing.Size(284, 261);
+            this.zedGraphControl1.Size = new System.Drawing.Size(484, 410);
             this.zedGraphControl1.TabIndex = 0;
             // 
             // Histogram
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(484, 410);
             this.Controls.Add(this.zedGraphControl1);
             this.Name = "Histogram";
             this.Text = "Histogram";

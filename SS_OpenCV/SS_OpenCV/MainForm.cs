@@ -567,6 +567,57 @@ namespace SS_OpenCV
 
         }
 
+        private void binarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int CutValue;
+
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+
+            histogramToolStripMenuItem_Click(sender, e);
+
+            InputBox frame = new InputBox("Cut value");
+            frame.ShowDialog();
+            Cursor = Cursors.WaitCursor; // cursor relogio
+            try
+            {
+                CutValue = int.Parse(frame.ValueTextBox.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please insert float values!");
+                return;
+            }
+            
+            imgUndo = img.Copy(); //copy Undo Image
+            DateTime d1 = DateTime.Now;
+            ImageClass.binar(imgUndo, img, CutValue);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+        }
+
+        private void otsuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+
+            histogramToolStripMenuItem_Click(sender, e);
+
+            Cursor = Cursors.WaitCursor; // cursor relogio
+
+            imgUndo = img.Copy(); //copy Undo Image
+            DateTime d1 = DateTime.Now;
+            ImageClass.otsu(imgUndo, img);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+        }
+
         private void ImageViewer_MouseClick(object sender, MouseEventArgs e)
         {
             mouseX = e.X;
