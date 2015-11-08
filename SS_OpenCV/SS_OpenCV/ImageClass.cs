@@ -587,12 +587,13 @@ namespace SS_OpenCV
             int height = img.Height;
             int nChan = m.nChannels; // numero de canais 3
             int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
-            int x, y;
+            int x = 0, y = 0;
 
             int sum_intens = 0, Threshold;
             int maxT = 0, Tval = 0, aux = 0;
-            float q1, q2, u1, u2, sigma;
+            float q1 = 0, q2 = 0, u1, u2, sigma;
             float[] intens_prob = new float[256];
+
 
             if (nChan == 3) // imagem em RGB
             {
@@ -608,58 +609,46 @@ namespace SS_OpenCV
                     //no fim da linha avança alinhamento (padding)
                     dataPtr += padding;
                 }
-            }
 
-            if (nChan == 3) // imagem em RGB
-            {
-                for (y = 0; y < height; y++)
+                for (aux = 0; aux < 256; aux++)
+                    intens_prob[aux] = (float)intensity[aux] * 100 / (x * y);
+
+
+                dataPtr = (byte*)m.imageData.ToPointer();
+
+                for (Threshold = 0; Threshold < 256; Threshold++)
                 {
-                    for (x = 0; x < width; x++)
+                    u1 = u2 = 0;
+
+                    q1 += intens_prob[Threshold];
+
+                    q2 = 1 - q1;
+
+                    if ((q1 * q2) != 0)
                     {
-                        for (aux = 0; aux < 256; aux++)
+                        for (aux = 0; aux < Threshold + 1; aux++)
+                            u1 += intensity[aux] * intens_prob[aux];
+                        u1 = (float)(u1 / q1);
+
+                        for (aux = Threshold + 1; aux < 256; aux++)
+                            u2 += intensity[aux] * intens_prob[aux];
+                        u2 = (float)(u2 / q2);
+
+                        /****************************************/
+                        /*Este pedaço de código está mal*/
+                        sigma = q1 * q2 * (u1 - u2) * (u1 - u2);
+
+                        if (sigma > maxT)
                         {
-                            sum_intens += intensity[aux];
-
-                            for (aux = 0; aux < 256; aux++)
-                                intens_prob[aux] = intensity[aux] / sum_intens;
-
-                            for (Threshold = 0; Threshold < 256; Threshold++)
-                            {
-                                q1 = q2 = u1 = u2 = 0;
-
-                                for (aux = 0; aux < 256; aux++)
-                                    q1 += intens_prob[aux];
-
-                                q2 = 1 - q1;
-
-                                if (q1 * q2 != 0)
-                                {
-                                    for (aux = 0; aux < Threshold + 1; aux++)
-                                        u1 += intensity[aux] * intens_prob[aux];
-                                    u1 = u1 / q1;
-
-                                    for (aux = Threshold + 1; aux < 256; aux++)
-                                        u2 += intensity[aux] * intens_prob[aux];
-                                    u2 = u2 / q2;
-
-                                    sigma = q1 * q2 * (u1 - u2) * (u1 - u2);
-
-                                    if (sigma > maxT)
-                                    {
-                                        sigma = maxT;
-                                        Tval = Threshold;
-                                    }
-                                }
-                            }
-                            // avança apontador para próximo pixel
-                            dataPtr += nChan;
+                            sigma = maxT;
+                            Tval = Threshold;
                         }
-                        //no fim da linha avança alinhamento (padding)
-                        dataPtr += padding;
+                        /****************************************/
                     }
                 }
             }
 
+            Console.Write(Tval);
             binar(imgUndo, img, Tval);
         }
 

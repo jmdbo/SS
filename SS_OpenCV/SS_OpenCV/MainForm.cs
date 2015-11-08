@@ -604,7 +604,7 @@ namespace SS_OpenCV
             if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
                 return;
 
-            histogramToolStripMenuItem_Click(sender, e);
+            //histogramToolStripMenuItem_Click(sender, e);
 
             Cursor = Cursors.WaitCursor; // cursor relogio
 
