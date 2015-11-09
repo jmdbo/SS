@@ -581,7 +581,6 @@ namespace SS_OpenCV
         {
             MIplImage m = img.MIplImage;
             byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
-            byte average;
             int[] intensity = new int[256];
             int width = img.Width;
             int height = img.Height;
@@ -589,11 +588,11 @@ namespace SS_OpenCV
             int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
             int x = 0, y = 0;
 
-            int sum_intens = 0, Threshold;
-            int maxT = 0, Tval = 0, aux = 0;
-            float q1 = 0, q2 = 0, u1, u2, sigma;
-            float[] intens_prob = new float[256];
-
+            int Threshold;
+            int Tval = 0, aux = 0, imgSize = width * height;
+            float maxT = 0, q1 = 0, q2 = 0, u1, u2;
+            float [] sigma = new float[256];
+            float [] intens_prob = new float[256];
 
             if (nChan == 3) // imagem em RGB
             {
@@ -601,7 +600,7 @@ namespace SS_OpenCV
                 {
                     for (x = 0; x < width; x++)
                     {
-                        intensity[(int)(dataPtr[0] + dataPtr[1] + dataPtr[2] + 0.5) / 3]++;
+                        intensity[(dataPtr[0] + dataPtr[1] + dataPtr[2]) / 3]++;
 
                         // avança apontador para próximo pixel
                         dataPtr += nChan;
@@ -609,46 +608,50 @@ namespace SS_OpenCV
                     //no fim da linha avança alinhamento (padding)
                     dataPtr += padding;
                 }
+            }
 
-                for (aux = 0; aux < 256; aux++)
-                    intens_prob[aux] = (float)intensity[aux] * 100 / (x * y);
+            for (aux = 0; aux < 256; aux++)
+                intens_prob[aux] = (float)intensity[aux] / imgSize;
 
+            for (Threshold = 0; Threshold < 256; Threshold++)
+            {
+                u1 = 0;
+                u2 = 0;
+                q1 = 0;
+                q2 = 0;
 
-                dataPtr = (byte*)m.imageData.ToPointer();
+                for (aux = 0; aux < Threshold+1; aux++)
+                    q1 += intens_prob[aux];
 
-                for (Threshold = 0; Threshold < 256; Threshold++)
+                q2 = 1 - q1;
+
+                if ((q1 * q2) != 0)
                 {
-                    u1 = u2 = 0;
+                    for (aux = 0; aux < (Threshold + 1); aux++)
+                        u1 += (aux * intens_prob[aux]);
+                    u1 = (u1 / q1);
 
-                    q1 += intens_prob[Threshold];
+                    for (aux = (Threshold + 1); aux < 256; aux++)
+                        u2 += (aux * intens_prob[aux]);
+                    u2 = (u2 / q2);
 
-                    q2 = 1 - q1;
+                    /****************************************/
+                    /*Este pedaço de código está mal*/
+                    sigma[Threshold] = q1 * q2 * (u1 - u2) * (u1 - u2);
 
-                    if ((q1 * q2) != 0)
-                    {
-                        for (aux = 0; aux < Threshold + 1; aux++)
-                            u1 += intensity[aux] * intens_prob[aux];
-                        u1 = (float)(u1 / q1);
 
-                        for (aux = Threshold + 1; aux < 256; aux++)
-                            u2 += intensity[aux] * intens_prob[aux];
-                        u2 = (float)(u2 / q2);
-
-                        /****************************************/
-                        /*Este pedaço de código está mal*/
-                        sigma = q1 * q2 * (u1 - u2) * (u1 - u2);
-
-                        if (sigma > maxT)
-                        {
-                            sigma = maxT;
-                            Tval = Threshold;
-                        }
-                        /****************************************/
-                    }
+                    /****************************************/
                 }
             }
 
-            Console.Write(Tval);
+            for (Threshold = 0; Threshold < 256; Threshold++)
+                if (sigma[Threshold] > maxT)
+                {
+                    maxT = sigma[Threshold];
+                    Tval = Threshold;
+                }
+
+            Console.WriteLine("Final -> " + Tval);
             binar(imgUndo, img, Tval);
         }
 
