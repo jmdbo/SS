@@ -591,7 +591,7 @@ namespace SS_OpenCV
             int Threshold;
             int Tval = 0, aux = 0, imgSize = width * height;
             float maxT = 0, q1 = 0, q2 = 0, u1, u2;
-            float [] sigma = new float[256];
+            float sigma = 0;
             float [] intens_prob = new float[256];
 
             if (nChan == 3) // imagem em RGB
@@ -626,31 +626,25 @@ namespace SS_OpenCV
 
                 if ((q1 * q2) != 0)
                 {
-                    for (aux = 0; aux < Threshold + 1; aux++)
+                    for (aux = 0; aux < (Threshold + 1); aux++)
                         u1 += aux * intens_prob[aux];
                     u1 = (u1 / q1);
 
-                    for (aux = Threshold + 1; aux < 256; aux++)
+                    for (aux = (Threshold + 1); aux < 256; aux++)
                         u2 += aux * intens_prob[aux];
                     u2 = (u2 / q2);
 
-                    /****************************************/
-                    /*Este pedaço de código está mal*/
-                    sigma[Threshold] = q1 * q2 * (u1 - u2) * (u1 - u2);
+                    sigma = q1 * q2 * (u1 - u2) * (u1 - u2);
 
-
-                    /****************************************/
+                    if (sigma > maxT)
+                    {
+                        maxT = sigma;
+                        Tval = Threshold;
+                    }
                 }
             }
 
-            for (Threshold = 0; Threshold < 256; Threshold++)
-                if (sigma[Threshold] > maxT)
-                {
-                    maxT = sigma[Threshold];
-                    Tval = Threshold;
-                }
-
-            Console.Write("Final -> " + Tval);
+            Console.WriteLine("Final -> " + Tval);
             binar(imgUndo, img, Tval);
         }
 
