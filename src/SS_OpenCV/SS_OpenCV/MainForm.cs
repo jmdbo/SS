@@ -618,6 +618,24 @@ namespace SS_OpenCV
             MessageBox.Show((d2 - d1).ToString());
         }
 
+        private void getSignToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+            Cursor = Cursors.WaitCursor; // cursor relogio
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
+            ImageClass.getSignal(img);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+        }
+
         private void ImageViewer_MouseClick(object sender, MouseEventArgs e)
         {
             mouseX = e.X;
