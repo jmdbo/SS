@@ -620,19 +620,18 @@ namespace SS_OpenCV
                 q1 = 0;
                 q2 = 0;
 
-                for (aux = 0; aux < Threshold+1; aux++)
+                for (aux = 0; aux < Threshold; aux++)
                     q1 += intens_prob[aux];
-
                 q2 = 1 - q1;
 
                 if ((q1 * q2) != 0)
                 {
-                    for (aux = 0; aux < (Threshold + 1); aux++)
-                        u1 += (aux * intens_prob[aux]);
+                    for (aux = 0; aux < Threshold + 1; aux++)
+                        u1 += aux * intens_prob[aux];
                     u1 = (u1 / q1);
 
-                    for (aux = (Threshold + 1); aux < 256; aux++)
-                        u2 += (aux * intens_prob[aux]);
+                    for (aux = Threshold + 1; aux < 256; aux++)
+                        u2 += aux * intens_prob[aux];
                     u2 = (u2 / q2);
 
                     /****************************************/
@@ -651,7 +650,7 @@ namespace SS_OpenCV
                     Tval = Threshold;
                 }
 
-            Console.WriteLine("Final -> " + Tval);
+            Console.Write("Final -> " + Tval);
             binar(imgUndo, img, Tval);
         }
 
