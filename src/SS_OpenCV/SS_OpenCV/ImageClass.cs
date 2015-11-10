@@ -698,6 +698,43 @@ namespace SS_OpenCV
             }
         }
 
+        internal static unsafe void getSignal(Image<Bgr,byte> img)
+        {
+            MIplImage m = img.MIplImage;
+            byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+            int width = img.Width;
+            int height = img.Height;
+            int nChan = m.nChannels; // numero de canais 3
+            int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+            int x, y;
+
+            if (nChan == 3) // imagem em RGB
+            {
+                for (y = 0; y < height; y++)
+                {
+                    for (x = 0; x < width; x++)
+                    {
+                        //Definir o que é o vermelho
+                        //Calcular a distancia ao vermelho e definir um threshold até ao qual consideramos um ponto vermelho
+                        //Verificar se o vermelho continua a ser a componente maior!
+                        if (dataPtr[2] > 70 && dataPtr[0] < 70 && dataPtr[1] < 70)
+                        {
+                            dataPtr[2] = 255;
+                        }
+                        else dataPtr[2] = 0;
+                        dataPtr[0] = dataPtr[2];
+                        dataPtr[1] = dataPtr[2];
+
+                        // avança apontador para próximo pixel
+                        dataPtr += nChan;
+                    }
+                    //no fim da linha avança alinhamento (padding)
+                    dataPtr += padding;
+                }
+            }
+
+        }
+
         internal static unsafe void histogram(Image<Bgr, byte> img, int[] intensity, int[] red, int[] green, int[] blue, int v)
         {
             MIplImage m = img.MIplImage;
