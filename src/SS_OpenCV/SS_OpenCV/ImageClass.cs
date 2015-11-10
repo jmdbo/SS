@@ -730,5 +730,55 @@ namespace SS_OpenCV
             }
 
         }
+
+        internal static unsafe void sinal(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img)
+        {
+            MIplImage m = img.MIplImage;
+            byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+            byte blue, green, red, average;
+
+            int width = img.Width;
+            int height = img.Height;
+            int nChan = m.nChannels; // numero de canais 3
+            int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+            int x, y;
+
+            if (nChan == 3) // imagem em RGB
+            {
+                for (y = 0; y < height; y++)
+                {
+                    for (x = 0; x < width; x++)
+                    {
+                        //obtém as 3 componentes
+                        blue = dataPtr[0];
+                        green = dataPtr[1];
+                        red = dataPtr[2];
+
+                        // converte para cinza
+                        average = (byte)(((int)blue + green + red) / 3);
+
+                        if (red - ((blue + green)/2) > 40 && Math.Abs(blue - green) < 20)
+                        {
+                            dataPtr[0] = 0;
+                            dataPtr[1] = 0;
+                            dataPtr[2] = 0;
+                        }
+
+                        else
+                        {
+                            dataPtr[0] = 255;
+                            dataPtr[1] = 255;
+                            dataPtr[2] = 255;
+                        }
+
+                        // avança apontador para próximo pixel
+                        dataPtr += nChan;
+                    }
+
+                    //no fim da linha avança alinhamento (padding)
+                    dataPtr += padding;
+                }
+            }
+        }
     }
 }

@@ -618,6 +618,18 @@ namespace SS_OpenCV
             MessageBox.Show((d2 - d1).ToString());
         }
 
+        private void sinalToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+
+            imgUndo = img.Copy(); //copy Undo Image
+
+            ImageClass.sinal(imgUndo, img);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+        }
+
         private void ImageViewer_MouseClick(object sender, MouseEventArgs e)
         {
             mouseX = e.X;
