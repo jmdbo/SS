@@ -794,18 +794,18 @@ namespace SS_OpenCV
                         // converte para cinza
                         average = (byte)(((int)blue + green + red) / 3);
 
-                        if (red - ((blue + green)/2) > 50 && Math.Abs(blue - green) < 30)
-                        {
-                            dataPtr[0] = 0;
-                            dataPtr[1] = 0;
-                            dataPtr[2] = 0;
-                        }
-
-                        else
+                        if (red - ((blue + green)/2) > 30 && Math.Abs(blue - green) < 20)
                         {
                             dataPtr[0] = 255;
                             dataPtr[1] = 255;
                             dataPtr[2] = 255;
+                        }
+
+                        else
+                        {
+                            dataPtr[0] = 0;
+                            dataPtr[1] = 0;
+                            dataPtr[2] = 0;
                         }
 
                         // avança apontador para próximo pixel

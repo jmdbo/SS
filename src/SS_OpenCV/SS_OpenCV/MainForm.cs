@@ -629,7 +629,7 @@ namespace SS_OpenCV
             imgUndo = img.Copy();
             DateTime d1 = DateTime.Now;
 
-            ImageClass.getSignal(img);
+            ImageClass.sinal(imgUndo, img);
 
             ImageViewer.Refresh(); // atualiza imagem no ecrã
             DateTime d2 = DateTime.Now;
@@ -651,6 +651,8 @@ namespace SS_OpenCV
             img._Dilate(1);
             img._Erode(1);
             img._Dilate(1);
+
+
             ImageViewer.Refresh(); // atualiza imagem no ecrã
             DateTime d2 = DateTime.Now;
             Cursor = Cursors.Default; // cursor normal
