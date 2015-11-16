@@ -794,7 +794,7 @@ namespace SS_OpenCV
                         // converte para cinza
                         average = (byte)(((int)blue + green + red) / 3);
 
-                        if (red - ((blue + green)/2) > 40 && Math.Abs(blue - green) < 20)
+                        if (red - ((blue + green)/2) > 50 && Math.Abs(blue - green) < 30)
                         {
                             dataPtr[0] = 0;
                             dataPtr[1] = 0;

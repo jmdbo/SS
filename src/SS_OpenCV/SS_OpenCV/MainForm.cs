@@ -618,7 +618,8 @@ namespace SS_OpenCV
             MessageBox.Show((d2 - d1).ToString());
         }
 
-        private void getSignToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void sinalToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
                 return;
@@ -630,6 +631,26 @@ namespace SS_OpenCV
 
             ImageClass.getSignal(img);
 
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+        }
+
+        private void erosaoiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+            Cursor = Cursors.WaitCursor; // cursor relogio
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
+            img._Erode(1);
+            img._Dilate(1);
+            img._Erode(1);
+            img._Dilate(1);
             ImageViewer.Refresh(); // atualiza imagem no ecrã
             DateTime d2 = DateTime.Now;
             Cursor = Cursors.Default; // cursor normal
