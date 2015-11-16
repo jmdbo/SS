@@ -67,6 +67,9 @@
             this.sinalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ImageViewer = new System.Windows.Forms.PictureBox();
+            this.erodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dilateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.projectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageViewer)).BeginInit();
@@ -150,7 +153,10 @@
             this.filtersToolStripMenuItem,
             this.histogramToolStripMenuItem,
             this.autoZoomToolStripMenuItem,
-            this.erosaoiToolStripMenuItem});
+            this.erosaoiToolStripMenuItem,
+            this.erodeToolStripMenuItem,
+            this.dilateToolStripMenuItem,
+            this.projectionToolStripMenuItem});
             this.imageToolStripMenuItem.Name = "imageToolStripMenuItem";
             this.imageToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.imageToolStripMenuItem.Text = "Image";
@@ -377,6 +383,27 @@
             this.ImageViewer.TabStop = false;
             this.ImageViewer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImageViewer_MouseClick);
             // 
+            // erodeToolStripMenuItem
+            // 
+            this.erodeToolStripMenuItem.Name = "erodeToolStripMenuItem";
+            this.erodeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.erodeToolStripMenuItem.Text = "Erode";
+            this.erodeToolStripMenuItem.Click += new System.EventHandler(this.erodeToolStripMenuItem_Click);
+            // 
+            // dilateToolStripMenuItem
+            // 
+            this.dilateToolStripMenuItem.Name = "dilateToolStripMenuItem";
+            this.dilateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dilateToolStripMenuItem.Text = "Dilate";
+            this.dilateToolStripMenuItem.Click += new System.EventHandler(this.dilateToolStripMenuItem_Click);
+            // 
+            // projectionToolStripMenuItem
+            // 
+            this.projectionToolStripMenuItem.Name = "projectionToolStripMenuItem";
+            this.projectionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.projectionToolStripMenuItem.Text = "Projection";
+            this.projectionToolStripMenuItem.Click += new System.EventHandler(this.projectionToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -438,6 +465,9 @@
         private System.Windows.Forms.ToolStripMenuItem otsuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sinalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem erosaoiToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem erodeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dilateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem projectionToolStripMenuItem;
     }
 }
 

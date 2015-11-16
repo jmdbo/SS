@@ -631,7 +631,8 @@ namespace SS_OpenCV
             imgUndo = img.Copy();
             DateTime d1 = DateTime.Now;
 
-            ImageClass.sinal(imgUndo, img);
+            ImageClass.sinal(img);
+
 
             ImageViewer.Refresh(); // atualiza imagem no ecrã
             DateTime d2 = DateTime.Now;
@@ -649,16 +650,81 @@ namespace SS_OpenCV
             imgUndo = img.Copy();
             DateTime d1 = DateTime.Now;
 
+            img._Dilate(3);
+            img._Erode(6);
+            img._Dilate(3);  
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+        }
+
+        private void erodeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+            Cursor = Cursors.WaitCursor; // cursor relogio
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
             img._Erode(1);
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+
+        }
+
+        private void dilateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+            Cursor = Cursors.WaitCursor; // cursor relogio
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            DateTime d1 = DateTime.Now;
+
+
             img._Dilate(1);
-            img._Erode(1);
-            img._Dilate(1);
+
+
 
 
             ImageViewer.Refresh(); // atualiza imagem no ecrã
             DateTime d2 = DateTime.Now;
             Cursor = Cursors.Default; // cursor normal
             MessageBox.Show((d2 - d1).ToString());
+        }
+
+        private void projectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int[] HistY = new int[img.Height];
+            int[] HistX = new int[img.Width];
+            
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+
+            Cursor = Cursors.WaitCursor; // cursor relogio                                         
+            DateTime d1 = DateTime.Now;
+
+            ImageClass.projection(img, HistX, HistY);
+            HistogramXY histForm = new HistogramXY(HistX, "X");
+
+            HistogramXY histForm2 = new HistogramXY(HistY, "Y");
+
+            histForm.Show();
+            histForm2.Show();
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+
         }
 
         private void ImageViewer_MouseClick(object sender, MouseEventArgs e)

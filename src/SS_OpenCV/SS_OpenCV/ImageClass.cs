@@ -479,7 +479,6 @@ namespace SS_OpenCV
             MIplImage n = imgUndo.MIplImage;
             byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
             byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
-            byte* dataOrigPtr;
             int width = img.Width;
             int height = img.Height;
             int nChan = m.nChannels; // numero de canais 3
@@ -768,7 +767,7 @@ namespace SS_OpenCV
 
         }
 
-        internal static unsafe void sinal(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img)
+        internal static unsafe void sinal(Image<Bgr, byte> img)
         {
             MIplImage m = img.MIplImage;
             byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
@@ -814,6 +813,32 @@ namespace SS_OpenCV
 
                     //no fim da linha avança alinhamento (padding)
                     dataPtr += padding;
+                }
+            }
+        }
+
+        internal static unsafe void projection(Image<Bgr, byte> img, int[] HistX, int[] HistY)
+        {
+            MIplImage n = img.MIplImage;
+            byte* dataPtr = (byte*)n.imageData.ToPointer(); // obter apontador do inicio da imagem
+
+            int width = img.Width;
+            int height = img.Height;
+            int nChan = n.nChannels; // numero de canais 3
+            int padding = n.widthStep - n.nChannels * n.width; // alinhamento (padding)
+            int x, y;
+
+
+
+            for (x = 0; x < img.Width; x++)
+            {
+                for (y = 0; y < img.Height; y++)
+                {
+                    if ((dataPtr + y * n.widthStep + x * nChan)[0]==255)
+                    {
+                        HistX[x]++;
+                        HistY[y]++;
+                    }
                 }
             }
         }
