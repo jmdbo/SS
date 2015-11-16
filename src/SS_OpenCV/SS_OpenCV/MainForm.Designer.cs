@@ -62,12 +62,11 @@
             this.otsuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.histogramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoZoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.erosaoiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sinalToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sinalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ImageViewer = new System.Windows.Forms.PictureBox();
-            this.sinalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.erosaoiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageViewer)).BeginInit();
@@ -83,9 +82,8 @@
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
             this.imageToolStripMenuItem,
-            this.autoresToolStripMenuItem,
-            this.sinalToolStripMenuItem1,
-            this.sinalToolStripMenuItem});
+            this.sinalToolStripMenuItem,
+            this.autoresToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(792, 24);
@@ -248,21 +246,21 @@
             // translationToolStripMenuItem
             // 
             this.translationToolStripMenuItem.Name = "translationToolStripMenuItem";
-            this.translationToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.translationToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.translationToolStripMenuItem.Text = "Translation";
             this.translationToolStripMenuItem.Click += new System.EventHandler(this.translationToolStripMenuItem_Click);
             // 
             // rotationToolStripMenuItem
             // 
             this.rotationToolStripMenuItem.Name = "rotationToolStripMenuItem";
-            this.rotationToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.rotationToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.rotationToolStripMenuItem.Text = "Rotation";
             this.rotationToolStripMenuItem.Click += new System.EventHandler(this.rotationToolStripMenuItem_Click);
             // 
             // zoomToolStripMenuItem
             // 
             this.zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
-            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.zoomToolStripMenuItem.Text = "Zoom";
             this.zoomToolStripMenuItem.Click += new System.EventHandler(this.zoomToolStripMenuItem_Click);
             // 
@@ -330,11 +328,20 @@
             // 
             // autoZoomToolStripMenuItem
             // 
+            this.autoZoomToolStripMenuItem.Checked = true;
             this.autoZoomToolStripMenuItem.CheckOnClick = true;
+            this.autoZoomToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.autoZoomToolStripMenuItem.Name = "autoZoomToolStripMenuItem";
-            this.autoZoomToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.autoZoomToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.autoZoomToolStripMenuItem.Text = "Auto Zoom";
             this.autoZoomToolStripMenuItem.Click += new System.EventHandler(this.autoZoomToolStripMenuItem_Click);
+            // 
+            // erosaoiToolStripMenuItem
+            // 
+            this.erosaoiToolStripMenuItem.Name = "erosaoiToolStripMenuItem";
+            this.erosaoiToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.erosaoiToolStripMenuItem.Text = "erosaoi";
+            this.erosaoiToolStripMenuItem.Click += new System.EventHandler(this.erosaoiToolStripMenuItem_Click);
             // 
             // autoresToolStripMenuItem
             // 
@@ -343,10 +350,12 @@
             this.autoresToolStripMenuItem.Text = "Autores...";
             this.autoresToolStripMenuItem.Click += new System.EventHandler(this.autoresToolStripMenuItem_Click);
             // 
-            // sinalToolStripMenuItem1
+            // sinalToolStripMenuItem
             // 
-            this.sinalToolStripMenuItem1.Name = "sinalToolStripMenuItem1";
-            this.sinalToolStripMenuItem1.Size = new System.Drawing.Size(12, 20);
+            this.sinalToolStripMenuItem.Name = "sinalToolStripMenuItem";
+            this.sinalToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.sinalToolStripMenuItem.Text = "Sinal";
+            this.sinalToolStripMenuItem.Click += new System.EventHandler(this.sinalToolStripMenuItem_Click);
             // 
             // panel1
             // 
@@ -367,20 +376,6 @@
             this.ImageViewer.TabIndex = 6;
             this.ImageViewer.TabStop = false;
             this.ImageViewer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImageViewer_MouseClick);
-            // 
-            // sinalToolStripMenuItem
-            // 
-            this.sinalToolStripMenuItem.Name = "sinalToolStripMenuItem";
-            this.sinalToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.sinalToolStripMenuItem.Text = "Sinal";
-            this.sinalToolStripMenuItem.Click += new System.EventHandler(this.sinalToolStripMenuItem_Click);
-            // 
-            // erosaoiToolStripMenuItem
-            // 
-            this.erosaoiToolStripMenuItem.Name = "erosaoiToolStripMenuItem";
-            this.erosaoiToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.erosaoiToolStripMenuItem.Text = "erosaoi";
-            this.erosaoiToolStripMenuItem.Click += new System.EventHandler(this.erosaoiToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -441,7 +436,6 @@
         private System.Windows.Forms.ToolStripMenuItem histogramToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem binarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem otsuToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sinalToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem sinalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem erosaoiToolStripMenuItem;
     }

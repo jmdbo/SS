@@ -22,6 +22,8 @@ namespace SS_OpenCV
         {
             InitializeComponent();
             title_bak = Text;
+            ImageViewer.SizeMode = PictureBoxSizeMode.Zoom;
+            ImageViewer.Dock = DockStyle.Fill;
         }
 
         /// <summary>
