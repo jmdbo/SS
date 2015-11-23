@@ -705,6 +705,7 @@ namespace SS_OpenCV
         {
             int[] HistY = new int[img.Height];
             int[] HistX = new int[img.Width];
+            int xMaxPos = 0, xMinPos = 0, yMaxPos = 0, yMinPos = 0;
             
             if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
                 return;
@@ -712,13 +713,13 @@ namespace SS_OpenCV
             Cursor = Cursors.WaitCursor; // cursor relogio                                         
             DateTime d1 = DateTime.Now;
 
-            ImageClass.projection(img, HistX, HistY);
-            HistogramXY histForm = new HistogramXY(HistX, "X");
+            ImageClass.projection(img, HistX, HistY, out xMaxPos, out xMinPos, out yMaxPos, out yMinPos);
+            //HistogramXY histForm = new HistogramXY(HistX, "X");
 
-            HistogramXY histForm2 = new HistogramXY(HistY, "Y");
+            //HistogramXY histForm2 = new HistogramXY(HistY, "Y");
 
-            histForm.Show();
-            histForm2.Show();
+            //histForm.Show();
+            //histForm2.Show();
 
             ImageViewer.Refresh(); // atualiza imagem no ecrã
             DateTime d2 = DateTime.Now;

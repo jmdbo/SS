@@ -817,7 +817,7 @@ namespace SS_OpenCV
             }
         }
 
-        internal static unsafe void projection(Image<Bgr, byte> img, int[] HistX, int[] HistY)
+        internal static unsafe void projection(Image<Bgr, byte> img, int[] HistX, int[] HistY, out int xMaxPos, out int xMinPos, out int yMaxPos, out int yMinPos)
         {
             MIplImage n = img.MIplImage;
             byte* dataPtr = (byte*)n.imageData.ToPointer(); // obter apontador do inicio da imagem
@@ -826,9 +826,11 @@ namespace SS_OpenCV
             int height = img.Height;
             int nChan = n.nChannels; // numero de canais 3
             int padding = n.widthStep - n.nChannels * n.width; // alinhamento (padding)
-            int x, y;
-
-
+            int x, y, xMax = 0, yMax = 0, yPos, xPos;
+            xMaxPos = -1;
+            xMinPos = -1;
+            yMaxPos = -1;
+            yMinPos = -1;
 
             for (x = 0; x < img.Width; x++)
             {
@@ -841,6 +843,37 @@ namespace SS_OpenCV
                     }
                 }
             }
+
+
+            for (x = 0; x < img.Width; x++)
+            {
+                if (xMax < HistX[x])
+                {
+                    xMax = HistX[x];
+                    xPos = x;
+                }
+            }
+
+            for (y = 0; y < img.Height; y++)
+            {
+                if (yMax < HistY[y])
+                {
+                    yMax = HistY[y];
+                    yPos = y;
+                }
+            }
+
+            
+
+            Console.WriteLine("Maximum in x");
+            Console.WriteLine("Value: "+ xMax.ToString());
+
+            Console.WriteLine("Position: " + xMaxPos.ToString());
+            Console.WriteLine("Maximum in y");
+            Console.WriteLine("Value: " + yMax.ToString());
+
+            Console.WriteLine("Position: " + yMaxPos.ToString());
+
         }
     }
 }
