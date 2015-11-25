@@ -35,7 +35,8 @@ namespace SS_OpenCV
             myPane.AddCurve(axis, list1, Color.Gray, SymbolType.None);
             myPane.XAxis.Scale.Min = 0;
             myPane.XAxis.Scale.Max = x.Length-1;
-            zedGraphControl1.AxisChange();
+            zedGraphControl1.AxisChange();
+
         }
     }
 }

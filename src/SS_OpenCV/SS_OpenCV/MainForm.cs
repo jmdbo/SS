@@ -670,7 +670,7 @@ namespace SS_OpenCV
             imgUndo = img.Copy();
             DateTime d1 = DateTime.Now;
 
-            img._Erode(1);
+            ImageClass.erode(imgUndo, img);
 
             ImageViewer.Refresh(); // atualiza imagem no ecrã
             DateTime d2 = DateTime.Now;

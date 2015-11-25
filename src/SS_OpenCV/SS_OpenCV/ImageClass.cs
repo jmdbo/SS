@@ -826,15 +826,16 @@ namespace SS_OpenCV
             int height = img.Height;
             int nChan = n.nChannels; // numero de canais 3
             int padding = n.widthStep - n.nChannels * n.width; // alinhamento (padding)
-            int x, y, xMax = 0, yMax = 0, yPos, xPos;
+            int x, y, xMax = 0, yMax = 0, yPos, xMaxTemp=0, xMinTemp=0, yMaxTemp = 0, yMinTemp = 0;
+            bool isSign = false;
             xMaxPos = -1;
             xMinPos = -1;
             yMaxPos = -1;
             yMinPos = -1;
 
-            for (x = 0; x < img.Width; x++)
+            for (x = 0; x < width; x++)
             {
-                for (y = 0; y < img.Height; y++)
+                for (y = 0; y < height; y++)
                 {
                     if ((dataPtr + y * n.widthStep + x * nChan)[0]==255)
                     {
@@ -845,35 +846,96 @@ namespace SS_OpenCV
             }
 
 
-            for (x = 0; x < img.Width; x++)
+            for (x = 0; x < width; x++)
             {
-                if (xMax < HistX[x])
+                if (HistX[x] > 20 && !isSign)
                 {
-                    xMax = HistX[x];
-                    xPos = x;
+                    isSign = true;
+                    xMinTemp = x;
+                } else if ( HistX[x] < 20 && isSign)
+                {
+                    isSign = false;
+                    xMaxTemp = x;
+
+                    if (xMaxPos - xMinPos < xMaxTemp - xMinTemp)
+                    {
+                        xMaxPos = xMaxTemp;
+                        xMinPos = xMinTemp;
+                    }
                 }
             }
 
-            for (y = 0; y < img.Height; y++)
-            {
-                if (yMax < HistY[y])
-                {
-                    yMax = HistY[y];
-                    yPos = y;
-                }
-            }
+            isSign = false;
 
-            
+            for (y = 0; y < height; y++)
+            {
+                if (HistY[y] > 20 && !isSign)
+                {
+                    isSign = true;
+                    yMinTemp = y;
+                }
+                else if (HistY[y] < 20 && isSign)
+                {
+                    isSign = false;
+                    yMaxTemp = y;
+
+                    if (yMaxPos - yMinPos < yMaxTemp - yMinTemp)
+                    {
+                        yMaxPos = yMaxTemp;
+                        yMinPos = yMinTemp;
+                    }
+                }
+            }           
 
             Console.WriteLine("Maximum in x");
-            Console.WriteLine("Value: "+ xMax.ToString());
-
-            Console.WriteLine("Position: " + xMaxPos.ToString());
-            Console.WriteLine("Maximum in y");
-            Console.WriteLine("Value: " + yMax.ToString());
-
-            Console.WriteLine("Position: " + yMaxPos.ToString());
+            Console.WriteLine("Min: "+ xMinPos.ToString());
+            Console.WriteLine("Max: " + xMaxPos.ToString());
+            Console.WriteLine("Sign in y");
+            Console.WriteLine("Min: " + yMinPos.ToString());
+            Console.WriteLine("Max: " + yMaxPos.ToString());
 
         }
+
+        internal static unsafe void erode(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img)
+        {
+            MIplImage m = img.MIplImage;
+            // MIplImage n = imgUndo.MIplImage;
+            byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+            //byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+            int width = img.Width;
+            int height = img.Height;
+            int nChan = m.nChannels; // numero de canais 3
+            int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+            int x = 0, y = 0;
+
+            int xPlus = 0;
+            int yPlus = 0;
+            int xMins = 0;
+            int yMins = 0;
+
+            for (y = 1; y < height-1; y++)
+            {
+                for (x = 1; x < width-1; x++)
+                {
+                    xPlus = x + 1;
+                    yPlus = y + 1;
+                    xMins = x - 1;
+                    yMins = y - 1;
+
+                    if (
+                    (dataPtr + (yMins) * m.widthStep + (xMins) * nChan)[0] == 255 ||
+                    (dataPtr + (yMins) * m.widthStep + (x + 0) * nChan)[0] == 255 ||
+                    (dataPtr + (yMins) * m.widthStep + (xPlus) * nChan)[0] == 255 ||
+                    (dataPtr + (y + 0) * m.widthStep + (xMins) * nChan)[0] == 255 ||
+                    (dataPtr + (y + 0) * m.widthStep + (x + 0) * nChan)[0] == 255 ||
+                    (dataPtr + (y + 0) * m.widthStep + (xPlus) * nChan)[0] == 255 ||
+                    (dataPtr + (yPlus) * m.widthStep + (xMins) * nChan)[0] == 255 ||
+                    (dataPtr + (yPlus) * m.widthStep + (x + 0) * nChan)[0] == 255 ||
+                    (dataPtr + (yPlus) * m.widthStep + (xPlus) * nChan)[0] == 255)
+                        dataPtr[0] = 255;
+                }
+            }
+        }
+
     }
 }
