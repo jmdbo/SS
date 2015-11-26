@@ -826,7 +826,7 @@ namespace SS_OpenCV
             int height = img.Height;
             int nChan = n.nChannels; // numero de canais 3
             int padding = n.widthStep - n.nChannels * n.width; // alinhamento (padding)
-            int x, y, xMax = 0, yMax = 0, yPos, xMaxTemp=0, xMinTemp=0, yMaxTemp = 0, yMinTemp = 0;
+            int x, y,  xMaxTemp=0, xMinTemp=0, yMaxTemp = 0, yMinTemp = 0;
             bool isSign = false;
             xMaxPos = -1;
             xMinPos = -1;
@@ -899,9 +899,9 @@ namespace SS_OpenCV
         internal static unsafe void erode(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img)
         {
             MIplImage m = img.MIplImage;
-            // MIplImage n = imgUndo.MIplImage;
+            MIplImage n = imgUndo.MIplImage;
             byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
-            //byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+            byte* dataUndoPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
             int width = img.Width;
             int height = img.Height;
             int nChan = m.nChannels; // numero de canais 3
@@ -913,29 +913,43 @@ namespace SS_OpenCV
             int xMins = 0;
             int yMins = 0;
 
-            for (y = 1; y < height-1; y++)
+            if (nChan == 3) // imagem em RGB
             {
-                for (x = 1; x < width-1; x++)
+                for (y = 1; y < height-1; y++)
                 {
-                    xPlus = x + 1;
-                    yPlus = y + 1;
-                    xMins = x - 1;
-                    yMins = y - 1;
+                    for (x = 1; x < width-1; x++)
+                    {
+                        xPlus = x + 1;
+                        yPlus = y + 1;
+                        xMins = x - 1;
+                        yMins = y - 1;
 
-                    if (
-                    (dataPtr + (yMins) * m.widthStep + (xMins) * nChan)[0] == 255 ||
-                    (dataPtr + (yMins) * m.widthStep + (x + 0) * nChan)[0] == 255 ||
-                    (dataPtr + (yMins) * m.widthStep + (xPlus) * nChan)[0] == 255 ||
-                    (dataPtr + (y + 0) * m.widthStep + (xMins) * nChan)[0] == 255 ||
-                    (dataPtr + (y + 0) * m.widthStep + (x + 0) * nChan)[0] == 255 ||
-                    (dataPtr + (y + 0) * m.widthStep + (xPlus) * nChan)[0] == 255 ||
-                    (dataPtr + (yPlus) * m.widthStep + (xMins) * nChan)[0] == 255 ||
-                    (dataPtr + (yPlus) * m.widthStep + (x + 0) * nChan)[0] == 255 ||
-                    (dataPtr + (yPlus) * m.widthStep + (xPlus) * nChan)[0] == 255)
-                        dataPtr[0] = 255;
+                        if (
+                            (dataUndoPtr + nChan)[0] == 0 ||
+                            (dataUndoPtr - nChan)[0] == 0 ||
+                            (dataUndoPtr + n.widthStep)[0] == 0 ||
+                            (dataUndoPtr - n.widthStep)[0] == 0 ||
+                            (dataUndoPtr - nChan + n.widthStep)[0] == 0 ||
+                            (dataUndoPtr + nChan + n.widthStep)[0] == 0 ||
+                            (dataUndoPtr - nChan - n.widthStep)[0] == 0 ||
+                            (dataUndoPtr + nChan - n.widthStep)[0] == 0
+                           )
+                        {
+                            dataPtr[0] = 0;
+                            dataPtr[1] = 0;
+                            dataPtr[2] = 0;
+                        }
+
+                            // avança apontador para próximo pixel
+                            dataPtr += nChan;
+                            dataUndoPtr += nChan;
+                    }
+
+                    //no fim da linha avança alinhamento (padding)
+                    dataPtr += padding;
+                    dataUndoPtr += padding;
                 }
             }
         }
-
     }
 }
