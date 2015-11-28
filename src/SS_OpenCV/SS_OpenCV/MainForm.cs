@@ -714,12 +714,12 @@ namespace SS_OpenCV
             DateTime d1 = DateTime.Now;
 
             ImageClass.projection(img, HistX, HistY, out xMaxPos, out xMinPos, out yMaxPos, out yMinPos);
-            //HistogramXY histForm = new HistogramXY(HistX, "X");
+            HistogramXY histForm = new HistogramXY(HistX, "X");
 
-            //HistogramXY histForm2 = new HistogramXY(HistY, "Y");
+            HistogramXY histForm2 = new HistogramXY(HistY, "Y");
 
-            //histForm.Show();
-            //histForm2.Show();
+            histForm.Show();
+            histForm2.Show();
 
             ImageViewer.Refresh(); // atualiza imagem no ecrã
             DateTime d2 = DateTime.Now;
