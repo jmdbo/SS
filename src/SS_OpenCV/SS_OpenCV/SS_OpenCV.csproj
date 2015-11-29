@@ -97,6 +97,12 @@
       <DependentUpon>Histogram.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageClass.cs" />
+    <Compile Include="SignForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SignForm.Designer.cs">
+      <DependentUpon>SignForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TranslationBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +138,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Histogram.resx">
       <DependentUpon>Histogram.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SignForm.resx">
+      <DependentUpon>SignForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TranslationBox.resx">
       <DependentUpon>TranslationBox.cs</DependentUpon>

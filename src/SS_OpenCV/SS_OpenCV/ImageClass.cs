@@ -672,7 +672,7 @@ namespace SS_OpenCV
             }
         }
 
-        internal static unsafe void CropImage(Image<Bgr, byte> imgUndo, out Image<Bgr, byte> img, int xMaxPos, int xMinPos, int yMaxPos, int yMinPos)
+        internal static unsafe void CropImage(Image<Bgr, byte> imgUndo, out Image<Bgr, byte> img, Image<Bgr, byte> imgToShow, int xMaxPos, int xMinPos, int yMaxPos, int yMinPos)
         {
             int x, y, xOrig, yOrig;
             int imgWidth = xMaxPos - xMinPos + 1;
@@ -680,8 +680,10 @@ namespace SS_OpenCV
             img = new Image<Bgr, byte>(imgWidth, imgHeight);
             MIplImage n = imgUndo.MIplImage;
             MIplImage m = img.MIplImage;
-            byte* dataNewPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
-            byte* dataPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+            MIplImage o = imgToShow.MIplImage;
+            byte* dataNewPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem backup
+            byte* dataPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem ;
+            byte* dataToShowPtr = (byte*)o.imageData.ToPointer();
             int nChan = m.nChannels; // numero de canais 3
             int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
 
@@ -705,6 +707,33 @@ namespace SS_OpenCV
                     //no fim da linha avança alinhamento (padding)
                     dataNewPtr += padding;
                 }
+
+                for(x=0; x<imgWidth; x++)
+                {
+                    xOrig = xMinPos + x;
+                    (dataToShowPtr + (yMinPos) * n.widthStep + (xOrig) * nChan)[0] = 0;
+                    (dataToShowPtr + (yMinPos) * n.widthStep + (xOrig) * nChan)[1] = 0;
+                    (dataToShowPtr + (yMinPos) * n.widthStep + (xOrig) * nChan)[2] = 255;
+
+                    (dataToShowPtr + (yMaxPos) * n.widthStep + (xOrig) * nChan)[0] = 0;
+                    (dataToShowPtr + (yMaxPos) * n.widthStep + (xOrig) * nChan)[1] = 0;
+                    (dataToShowPtr + (yMaxPos) * n.widthStep + (xOrig) * nChan)[2] = 255;
+                }
+
+                for (y = 1; y < imgHeight; y++)
+                {
+                    yOrig = yMinPos + y;
+                    (dataToShowPtr + (yOrig) * n.widthStep + (xMinPos) * nChan)[0] = 0;
+                    (dataToShowPtr + (yOrig) * n.widthStep + (xMinPos) * nChan)[1] = 0;
+                    (dataToShowPtr + (yOrig) * n.widthStep + (xMinPos) * nChan)[2] = 255;
+
+                    (dataToShowPtr + (yOrig) * n.widthStep + (xMaxPos) * nChan)[0] = 0;
+                    (dataToShowPtr + (yOrig) * n.widthStep + (xMaxPos) * nChan)[1] = 0;
+                    (dataToShowPtr + (yOrig) * n.widthStep + (xMaxPos) * nChan)[2] = 255;
+
+                }
+
+
             }
             
         }

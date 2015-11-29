@@ -63,13 +63,14 @@
             this.histogramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoZoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.erosaoiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sinalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.ImageViewer = new System.Windows.Forms.PictureBox();
             this.erodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dilateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sinalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.ImageViewer = new System.Windows.Forms.PictureBox();
+            this.findSignToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageViewer)).BeginInit();
@@ -156,7 +157,8 @@
             this.erosaoiToolStripMenuItem,
             this.erodeToolStripMenuItem,
             this.dilateToolStripMenuItem,
-            this.projectionToolStripMenuItem});
+            this.projectionToolStripMenuItem,
+            this.findSignToolStripMenuItem});
             this.imageToolStripMenuItem.Name = "imageToolStripMenuItem";
             this.imageToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.imageToolStripMenuItem.Text = "Image";
@@ -169,7 +171,7 @@
             this.fastNegativeToolStripMenuItem,
             this.oneChannelGreyToolStripMenuItem});
             this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
-            this.colorToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.colorToolStripMenuItem.Text = "Color";
             // 
             // convertToToolStripMenuItem
@@ -246,7 +248,7 @@
             this.rotationToolStripMenuItem,
             this.zoomToolStripMenuItem});
             this.transformsToolStripMenuItem.Name = "transformsToolStripMenuItem";
-            this.transformsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.transformsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.transformsToolStripMenuItem.Text = "Transforms";
             // 
             // translationToolStripMenuItem
@@ -280,7 +282,7 @@
             this.binarToolStripMenuItem,
             this.otsuToolStripMenuItem});
             this.filtersToolStripMenuItem.Name = "filtersToolStripMenuItem";
-            this.filtersToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.filtersToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.filtersToolStripMenuItem.Text = "Filters";
             // 
             // x3MeanNoiseReductionToolStripMenuItem
@@ -328,7 +330,7 @@
             // histogramToolStripMenuItem
             // 
             this.histogramToolStripMenuItem.Name = "histogramToolStripMenuItem";
-            this.histogramToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.histogramToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.histogramToolStripMenuItem.Text = "Histogram";
             this.histogramToolStripMenuItem.Click += new System.EventHandler(this.histogramToolStripMenuItem_Click);
             // 
@@ -345,43 +347,9 @@
             // erosaoiToolStripMenuItem
             // 
             this.erosaoiToolStripMenuItem.Name = "erosaoiToolStripMenuItem";
-            this.erosaoiToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.erosaoiToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.erosaoiToolStripMenuItem.Text = "erosaoi";
             this.erosaoiToolStripMenuItem.Click += new System.EventHandler(this.erosaoiToolStripMenuItem_Click);
-            // 
-            // autoresToolStripMenuItem
-            // 
-            this.autoresToolStripMenuItem.Name = "autoresToolStripMenuItem";
-            this.autoresToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
-            this.autoresToolStripMenuItem.Text = "Autores...";
-            this.autoresToolStripMenuItem.Click += new System.EventHandler(this.autoresToolStripMenuItem_Click);
-            // 
-            // sinalToolStripMenuItem
-            // 
-            this.sinalToolStripMenuItem.Name = "sinalToolStripMenuItem";
-            this.sinalToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.sinalToolStripMenuItem.Text = "Sinal";
-            this.sinalToolStripMenuItem.Click += new System.EventHandler(this.sinalToolStripMenuItem_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.ImageViewer);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 24);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(792, 524);
-            this.panel1.TabIndex = 6;
-            // 
-            // ImageViewer
-            // 
-            this.ImageViewer.Location = new System.Drawing.Point(0, 0);
-            this.ImageViewer.Name = "ImageViewer";
-            this.ImageViewer.Size = new System.Drawing.Size(576, 427);
-            this.ImageViewer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.ImageViewer.TabIndex = 6;
-            this.ImageViewer.TabStop = false;
-            this.ImageViewer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImageViewer_MouseClick);
             // 
             // erodeToolStripMenuItem
             // 
@@ -403,6 +371,47 @@
             this.projectionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.projectionToolStripMenuItem.Text = "Projection";
             this.projectionToolStripMenuItem.Click += new System.EventHandler(this.projectionToolStripMenuItem_Click);
+            // 
+            // sinalToolStripMenuItem
+            // 
+            this.sinalToolStripMenuItem.Name = "sinalToolStripMenuItem";
+            this.sinalToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.sinalToolStripMenuItem.Text = "Sinal";
+            this.sinalToolStripMenuItem.Click += new System.EventHandler(this.sinalToolStripMenuItem_Click);
+            // 
+            // autoresToolStripMenuItem
+            // 
+            this.autoresToolStripMenuItem.Name = "autoresToolStripMenuItem";
+            this.autoresToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
+            this.autoresToolStripMenuItem.Text = "Autores...";
+            this.autoresToolStripMenuItem.Click += new System.EventHandler(this.autoresToolStripMenuItem_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.ImageViewer);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 24);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(792, 524);
+            this.panel1.TabIndex = 6;
+            // 
+            // ImageViewer
+            // 
+            this.ImageViewer.Location = new System.Drawing.Point(0, 0);
+            this.ImageViewer.Name = "ImageViewer";
+            this.ImageViewer.Size = new System.Drawing.Size(576, 427);
+            this.ImageViewer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.ImageViewer.TabIndex = 6;
+            this.ImageViewer.TabStop = false;
+            this.ImageViewer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImageViewer_MouseClick);
+            // 
+            // findSignToolStripMenuItem
+            // 
+            this.findSignToolStripMenuItem.Name = "findSignToolStripMenuItem";
+            this.findSignToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.findSignToolStripMenuItem.Text = "Find Sign";
+            this.findSignToolStripMenuItem.Click += new System.EventHandler(this.findSignToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -468,6 +477,7 @@
         private System.Windows.Forms.ToolStripMenuItem erodeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dilateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem projectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem findSignToolStripMenuItem;
     }
 }
 

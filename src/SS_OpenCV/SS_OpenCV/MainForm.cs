@@ -708,7 +708,6 @@ namespace SS_OpenCV
             int[] HistY = new int[img.Height];
             int[] HistX = new int[img.Width];
             Image<Bgr, byte> imgTemp;
-            ComparingThread SelectedItem;
             List<ComparingThread> ComparingList = new List<ComparingThread>();
             List<Thread> ThreadList = new List<Thread>();
             int xMaxPos = 0, xMinPos = 0, yMaxPos = 0, yMinPos = 0, probPos = 0;
@@ -759,6 +758,74 @@ namespace SS_OpenCV
                     maxProb = item.probability;
                 }
             }
+            MessageBox.Show("Item: " + probPos.ToString() + "Probability: " + maxProb.ToString());
+
+        }
+
+        private void findSignToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int[] HistY = new int[img.Height];
+            int[] HistX = new int[img.Width];
+            Image<Bgr, byte> imgTemp2;
+            List<ComparingThread> ComparingList = new List<ComparingThread>();
+            List<Thread> ThreadList = new List<Thread>();
+            List<Image<Bgr, byte>> stepList = new List<Image<Bgr, byte>>();
+            int xMaxPos = 0, xMinPos = 0, yMaxPos = 0, yMinPos = 0, probPos = 0;
+            float maxProb = 0;
+
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+            
+            Cursor = Cursors.WaitCursor; // cursor relogio                                         
+            //DateTime d1 = DateTime.Now;
+            Image<Bgr, byte> imgTemp = img.Copy();
+            ImageClass.sinal(imgTemp);
+            stepList.Add(imgTemp.Copy());
+            ImageClass.projection(imgTemp, HistX, HistY, out xMaxPos, out xMinPos, out yMaxPos, out yMinPos);
+            ImageClass.CropImage(imgUndo, out imgTemp, img, xMaxPos, xMinPos, yMaxPos, yMinPos);
+            stepList.Add(img.Copy());
+            stepList.Add(imgTemp.Copy());
+            imgTemp = imgTemp.Resize(111, 111, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
+            stepList.Add(imgTemp.Copy());
+            ImageClass.CleanupSign(imgTemp);
+            stepList.Add(imgTemp.Copy());
+            for (int i = 0; i < 60; i++)
+            {
+                if (File.Exists("C:\\dev\\SS\\Handouts\\BaseDados\\" + i.ToString() + ".png"))
+                {
+                    imgTemp2 = new Image<Bgr, byte>("C:\\dev\\SS\\Handouts\\BaseDados\\" + i.ToString() + ".png");
+                    ComparingList.Add(new ComparingThread(imgTemp2, imgTemp, i));
+                }
+            }
+
+            foreach (ComparingThread item in ComparingList)
+            {
+                ThreadList.Add(new Thread(new ThreadStart(item.DoWork)));
+            }
+            foreach (Thread tr in ThreadList)
+            {
+                tr.Start();
+            }
+            foreach (Thread tr in ThreadList)
+            {
+                tr.Join();
+            }
+            //Thread T1 = new Thread(new ThreadStart());
+
+            ImageViewer.Image = img.Bitmap;
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            //DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            foreach (ComparingThread item in ComparingList)
+            {
+                if (item.probability > maxProb)
+                {
+                    probPos = item.signPos;
+                    maxProb = item.probability;
+                }
+            }
+            SignForm showSteps = new SignForm(stepList);
+            showSteps.Show();
             MessageBox.Show("Item: " + probPos.ToString() + "Probability: " + maxProb.ToString());
 
         }
