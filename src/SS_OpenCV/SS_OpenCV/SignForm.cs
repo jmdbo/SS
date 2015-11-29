@@ -23,11 +23,15 @@ namespace SS_OpenCV
             this.ImgStepList = imgSteps;
             ImageViewer.SizeMode = PictureBoxSizeMode.Zoom;
             ImageViewer.Dock = DockStyle.Fill;
+            SignViewer.SizeMode = PictureBoxSizeMode.Zoom;
+            SignViewer.Dock = DockStyle.Fill;
             currentPos = 0;
             if(ImgStepList.Count != 0)
             {
                 ImageViewer.Image = ImgStepList.ElementAt(0).Bitmap;
                 ImageViewer.Refresh();
+                SignViewer.Image = ImgStepList.ElementAt(ImgStepList.Count - 1).Bitmap;
+                SignViewer.Refresh();
                 buttonNext.Enabled = true;
                 buttonPrevious.Enabled = false;
 
