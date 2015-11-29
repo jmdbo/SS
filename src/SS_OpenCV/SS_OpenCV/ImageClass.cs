@@ -576,6 +576,139 @@ namespace SS_OpenCV
             }
         }
 
+        internal static void CompareWithDB(Image<Bgr, byte> img)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static unsafe void CleanupSign(Image<Bgr, byte> img)
+        {
+            MIplImage m = img.MIplImage;
+            byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+
+            int width = img.Width;
+            int height = img.Height;
+            int nChan = m.nChannels; // numero de canais 3
+            int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+            int x, y, blue, green, red;
+
+            if (nChan == 3) // imagem em RGB
+            {
+                for (y = 0; y < height; y++)
+                {
+                    for (x = 0; x < width; x++)
+                    {
+                        //obtém as 3 componentes
+                        blue = (dataPtr + (y) * m.widthStep + (x) * nChan)[0];
+                        green = (dataPtr + (y) * m.widthStep + (x) * nChan)[1];
+                        red = (dataPtr + (y) * m.widthStep + (x) * nChan)[2];
+
+                        if (red - ((blue + green) / 2) > 30 && Math.Abs(blue - green) < 20)
+                        {
+                            x = width;
+                        }
+                        else
+                        {
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[0] = 255;
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[1] = 255;
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[2] = 255;
+                        }
+                    }
+                }
+
+                for (y = 0; y < height; y++)
+                {
+                    for (x = width - 1; x >= 0; x--)
+                    {
+                        //obtém as 3 componentes
+                        blue = (dataPtr + (y) * m.widthStep + (x) * nChan)[0];
+                        green = (dataPtr + (y) * m.widthStep + (x) * nChan)[1];
+                        red = (dataPtr + (y) * m.widthStep + (x) * nChan)[2];
+
+                        if (red - ((blue + green) / 2) > 30 && Math.Abs(blue - green) < 20)
+                        {
+                            x = -1;
+                        }
+                        else
+                        {
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[0] = 255;
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[1] = 255;
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[2] = 255;
+                        }
+                    }
+                }
+
+                for (y = 0; y < height; y++)
+                {
+                    for (x = 0; x < width; x++)
+                    {
+                        //obtém as 3 componentes
+                        blue = (dataPtr + (y) * m.widthStep + (x) * nChan)[0];
+                        green = (dataPtr + (y) * m.widthStep + (x) * nChan)[1];
+                        red =   (dataPtr + (y) * m.widthStep + (x) * nChan)[2];
+
+                        if (red - ((blue + green) / 2) > 30 && Math.Abs(blue - green) < 20)
+                        {
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[0] = 0;
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[1] = 0;
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[2] = 0;
+                        }
+                        else if((blue+green+ red)/3 > 80)
+                        {
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[0] = 255;
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[1] = 255;
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[2] = 255;
+                        }
+                        else
+                        {
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[0] = 0;
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[1] = 0;
+                            (dataPtr + (y) * m.widthStep + (x) * nChan)[2] = 0;
+                        }
+                    }
+                }
+
+                
+            }
+        }
+
+        internal static unsafe void CropImage(Image<Bgr, byte> imgUndo, out Image<Bgr, byte> img, int xMaxPos, int xMinPos, int yMaxPos, int yMinPos)
+        {
+            int x, y, xOrig, yOrig;
+            int imgWidth = xMaxPos - xMinPos + 1;
+            int imgHeight = yMaxPos - yMinPos + 1;
+            img = new Image<Bgr, byte>(imgWidth, imgHeight);
+            MIplImage n = imgUndo.MIplImage;
+            MIplImage m = img.MIplImage;
+            byte* dataNewPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
+            byte* dataPtr = (byte*)n.imageData.ToPointer(); //Apontador imagem backup;
+            int nChan = m.nChannels; // numero de canais 3
+            int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
+
+            if (nChan == 3) // imagem em RGB
+            {
+                for (y = 0; y < imgHeight; y++)
+                {
+                    yOrig = yMinPos + y;
+
+                    for (x = 0; x < imgWidth; x++)
+                    {
+                        xOrig = xMinPos + x;
+                        
+                        dataNewPtr[0] = (dataPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[0];
+                        dataNewPtr[1] = (dataPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[1];
+                        dataNewPtr[2] = (dataPtr + (yOrig) * n.widthStep + (xOrig) * nChan)[2];
+                       
+                        // avança apontador para próximo pixel
+                        dataNewPtr += nChan;
+                    }
+                    //no fim da linha avança alinhamento (padding)
+                    dataNewPtr += padding;
+                }
+            }
+            
+        }
+
         internal static unsafe void otsu(Image<Bgr, byte> imgUndo, Image<Bgr, byte> img)
         {
             MIplImage m = img.MIplImage;
@@ -697,43 +830,6 @@ namespace SS_OpenCV
             }
         }
 
-        internal static unsafe void getSignal(Image<Bgr,byte> img)
-        {
-            MIplImage m = img.MIplImage;
-            byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
-            int width = img.Width;
-            int height = img.Height;
-            int nChan = m.nChannels; // numero de canais 3
-            int padding = m.widthStep - m.nChannels * m.width; // alinhamento (padding)
-            int x, y;
-
-            if (nChan == 3) // imagem em RGB
-            {
-                for (y = 0; y < height; y++)
-                {
-                    for (x = 0; x < width; x++)
-                    {
-                        //Definir o que é o vermelho
-                        //Calcular a distancia ao vermelho e definir um threshold até ao qual consideramos um ponto vermelho
-                        //Verificar se o vermelho continua a ser a componente maior!
-                        if (dataPtr[2] > 70 && dataPtr[0] < 70 && dataPtr[1] < 70)
-                        {
-                            dataPtr[2] = 255;
-                        }
-                        else dataPtr[2] = 0;
-                        dataPtr[0] = dataPtr[2];
-                        dataPtr[1] = dataPtr[2];
-
-                        // avança apontador para próximo pixel
-                        dataPtr += nChan;
-                    }
-                    //no fim da linha avança alinhamento (padding)
-                    dataPtr += padding;
-                }
-            }
-
-        }
-
         internal static unsafe void histogram(Image<Bgr, byte> img, int[] intensity, int[] red, int[] green, int[] blue, int v)
         {
             MIplImage m = img.MIplImage;
@@ -771,7 +867,7 @@ namespace SS_OpenCV
         {
             MIplImage m = img.MIplImage;
             byte* dataPtr = (byte*)m.imageData.ToPointer(); // obter apontador do inicio da imagem
-            byte blue, green, red, average;
+            byte blue, green, red;
 
             int width = img.Width;
             int height = img.Height;
@@ -790,16 +886,12 @@ namespace SS_OpenCV
                         green = dataPtr[1];
                         red = dataPtr[2];
 
-                        // converte para cinza
-                        average = (byte)(((int)blue + green + red) / 3);
-
                         if (red - ((blue + green)/2) > 30 && Math.Abs(blue - green) < 20)
                         {
                             dataPtr[0] = 255;
                             dataPtr[1] = 255;
                             dataPtr[2] = 255;
                         }
-
                         else
                         {
                             dataPtr[0] = 0;
@@ -848,11 +940,11 @@ namespace SS_OpenCV
 
             for (x = 0; x < width; x++)
             {
-                if (HistX[x] > 20 && !isSign)
+                if (HistX[x] > 15 && !isSign)
                 {
                     isSign = true;
                     xMinTemp = x;
-                } else if ( HistX[x] < 20 && isSign)
+                } else if ( HistX[x] < 15 && isSign)
                 {
                     isSign = false;
                     xMaxTemp = x;
@@ -869,12 +961,12 @@ namespace SS_OpenCV
 
             for (y = 0; y < height; y++)
             {
-                if (HistY[y] > 20 && !isSign)
+                if (HistY[y] > 15 && !isSign)
                 {
                     isSign = true;
                     yMinTemp = y;
                 }
-                else if (HistY[y] < 20 && isSign)
+                else if (HistY[y] < 15 && isSign)
                 {
                     isSign = false;
                     yMaxTemp = y;

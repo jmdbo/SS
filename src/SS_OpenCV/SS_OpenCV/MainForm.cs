@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.UI;
@@ -629,15 +630,15 @@ namespace SS_OpenCV
 
             //copy Undo Image
             imgUndo = img.Copy();
-            DateTime d1 = DateTime.Now;
+            //DateTime d1 = DateTime.Now;
 
             ImageClass.sinal(img);
 
 
             ImageViewer.Refresh(); // atualiza imagem no ecrã
-            DateTime d2 = DateTime.Now;
+            //DateTime d2 = DateTime.Now;
             Cursor = Cursors.Default; // cursor normal
-            MessageBox.Show((d2 - d1).ToString());
+            //MessageBox.Show((d2 - d1).ToString());
         }
 
         private void erosaoiToolStripMenuItem_Click(object sender, EventArgs e)
@@ -711,20 +712,21 @@ namespace SS_OpenCV
                 return;
 
             Cursor = Cursors.WaitCursor; // cursor relogio                                         
-            DateTime d1 = DateTime.Now;
+            //DateTime d1 = DateTime.Now;
 
             ImageClass.projection(img, HistX, HistY, out xMaxPos, out xMinPos, out yMaxPos, out yMinPos);
-            HistogramXY histForm = new HistogramXY(HistX, "X");
-
-            HistogramXY histForm2 = new HistogramXY(HistY, "Y");
-
-            histForm.Show();
-            histForm2.Show();
-
+            ImageClass.CropImage(imgUndo,out img, xMaxPos, xMinPos, yMaxPos, yMinPos);
+            img = img.Resize(111, 111, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
+            ImageClass.CleanupSign(img);
+            ComparingThread imgCmp1 = new ComparingThread(new Image<Bgr, byte>(".png"))
+            
+            //Thread T1 = new Thread(new ThreadStart());
+            
+            ImageViewer.Image = img.Bitmap;
             ImageViewer.Refresh(); // atualiza imagem no ecrã
-            DateTime d2 = DateTime.Now;
+            //DateTime d2 = DateTime.Now;
             Cursor = Cursors.Default; // cursor normal
-            MessageBox.Show((d2 - d1).ToString());
+            //MessageBox.Show((d2 - d1).ToString());
 
         }
 

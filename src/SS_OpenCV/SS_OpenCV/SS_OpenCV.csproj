@@ -83,6 +83,7 @@
     <Compile Include="AuthorsForm.Designer.cs">
       <DependentUpon>AuthorsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ComparingThread.cs" />
     <Compile Include="HistogramXY.cs">
       <SubType>Form</SubType>
     </Compile>
