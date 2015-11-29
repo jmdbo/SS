@@ -28,12 +28,22 @@ namespace SS_OpenCV
             set { prob = value; }
         }
 
-        public ComparingThread(Image<Bgr, byte> imgDB, Image<Bgr, byte> imgReal)
+        private int sign;
+
+        public int signPos
+        {
+            get { return sign; }
+            set { sign = value; }
+        }
+
+        public ComparingThread(Image<Bgr, byte> imgDB, Image<Bgr, byte> imgReal, int i)
         {
             this.imgOrig = imgDB.Copy();
             ImageClass.CleanupSign(this.imgOrig);
             this.imgCmp = imgReal.Copy();
             this.isFinish = false;
+            this.signPos = i;
+
         }
 
         public unsafe void DoWork()

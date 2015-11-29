@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -706,8 +707,13 @@ namespace SS_OpenCV
         {
             int[] HistY = new int[img.Height];
             int[] HistX = new int[img.Width];
-            int xMaxPos = 0, xMinPos = 0, yMaxPos = 0, yMinPos = 0;
-            
+            Image<Bgr, byte> imgTemp;
+            ComparingThread SelectedItem;
+            List<ComparingThread> ComparingList = new List<ComparingThread>();
+            List<Thread> ThreadList = new List<Thread>();
+            int xMaxPos = 0, xMinPos = 0, yMaxPos = 0, yMinPos = 0, probPos = 0;
+            float maxProb = 0;
+
             if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
                 return;
 
@@ -718,15 +724,42 @@ namespace SS_OpenCV
             ImageClass.CropImage(imgUndo,out img, xMaxPos, xMinPos, yMaxPos, yMinPos);
             img = img.Resize(111, 111, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
             ImageClass.CleanupSign(img);
-            ComparingThread imgCmp1 = new ComparingThread(new Image<Bgr, byte>(".png"))
-            
+            for (int i = 0; i < 60; i++)
+            {
+                if (File.Exists("C:\\dev\\SS\\Handouts\\BaseDados\\" + i.ToString() + ".png"))
+                {
+                    imgTemp = new Image<Bgr, byte>("C:\\dev\\SS\\Handouts\\BaseDados\\" + i.ToString() + ".png");
+                    ComparingList.Add(new ComparingThread(imgTemp, img, i));
+                }
+            }
+
+            foreach (ComparingThread item in ComparingList)
+            {
+                ThreadList.Add(new Thread(new ThreadStart(item.DoWork)));
+            }
+            foreach (Thread tr in ThreadList)
+            {
+                tr.Start();
+            }
+            foreach (Thread tr in ThreadList)
+            {
+                tr.Join();
+            }
             //Thread T1 = new Thread(new ThreadStart());
-            
+
             ImageViewer.Image = img.Bitmap;
             ImageViewer.Refresh(); // atualiza imagem no ecrã
             //DateTime d2 = DateTime.Now;
             Cursor = Cursors.Default; // cursor normal
-            //MessageBox.Show((d2 - d1).ToString());
+            foreach (ComparingThread item in ComparingList)
+            {
+                if(item.probability > maxProb)
+                {
+                    probPos = item.signPos;
+                    maxProb = item.probability;
+                }
+            }
+            MessageBox.Show("Item: " + probPos.ToString() + "Probability: " + maxProb.ToString());
 
         }
 
