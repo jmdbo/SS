@@ -98,6 +98,7 @@
             this.buttonNext.TabIndex = 1;
             this.buttonNext.Text = "Next";
             this.buttonNext.UseVisualStyleBackColor = true;
+            this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
             // 
             // SignForm
             // 

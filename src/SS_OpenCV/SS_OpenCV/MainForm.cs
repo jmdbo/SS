@@ -707,58 +707,31 @@ namespace SS_OpenCV
         {
             int[] HistY = new int[img.Height];
             int[] HistX = new int[img.Width];
-            Image<Bgr, byte> imgTemp;
             List<ComparingThread> ComparingList = new List<ComparingThread>();
             List<Thread> ThreadList = new List<Thread>();
-            int xMaxPos = 0, xMinPos = 0, yMaxPos = 0, yMinPos = 0, probPos = 0;
-            float maxProb = 0;
+            int xMaxPos = 0, xMinPos = 0, yMaxPos = 0, yMinPos = 0;      
 
             if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
                 return;
 
             Cursor = Cursors.WaitCursor; // cursor relogio                                         
-            //DateTime d1 = DateTime.Now;
+            DateTime d1 = DateTime.Now;
 
             ImageClass.projection(img, HistX, HistY, out xMaxPos, out xMinPos, out yMaxPos, out yMinPos);
-            ImageClass.CropImage(imgUndo,out img, xMaxPos, xMinPos, yMaxPos, yMinPos);
-            img = img.Resize(111, 111, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
-            ImageClass.CleanupSign(img);
-            for (int i = 0; i < 60; i++)
-            {
-                if (File.Exists("C:\\dev\\SS\\Handouts\\BaseDados\\" + i.ToString() + ".png"))
-                {
-                    imgTemp = new Image<Bgr, byte>("C:\\dev\\SS\\Handouts\\BaseDados\\" + i.ToString() + ".png");
-                    ComparingList.Add(new ComparingThread(imgTemp, img, i));
-                }
-            }
 
-            foreach (ComparingThread item in ComparingList)
-            {
-                ThreadList.Add(new Thread(new ThreadStart(item.DoWork)));
-            }
-            foreach (Thread tr in ThreadList)
-            {
-                tr.Start();
-            }
-            foreach (Thread tr in ThreadList)
-            {
-                tr.Join();
-            }
-            //Thread T1 = new Thread(new ThreadStart());
+            HistogramXY histForm = new HistogramXY(HistX, "X");
+            HistogramXY histForm2 = new HistogramXY(HistY, "Y");
+
+            histForm.Show();
+            histForm2.Show();
+
 
             ImageViewer.Image = img.Bitmap;
             ImageViewer.Refresh(); // atualiza imagem no ecrã
-            //DateTime d2 = DateTime.Now;
+            DateTime d2 = DateTime.Now;
             Cursor = Cursors.Default; // cursor normal
-            foreach (ComparingThread item in ComparingList)
-            {
-                if(item.probability > maxProb)
-                {
-                    probPos = item.signPos;
-                    maxProb = item.probability;
-                }
-            }
-            MessageBox.Show("Item: " + probPos.ToString() + "Probability: " + maxProb.ToString());
+            
+            MessageBox.Show((d2 - d1).ToString());
 
         }
 
@@ -824,6 +797,7 @@ namespace SS_OpenCV
                     maxProb = item.probability;
                 }
             }
+            stepList.Add(new Image<Bgr, byte>("C:\\dev\\SS\\Handouts\\BaseDados\\" + probPos.ToString() + ".png"));
             SignForm showSteps = new SignForm(stepList);
             showSteps.Show();
             MessageBox.Show("Item: " + probPos.ToString() + "Probability: " + maxProb.ToString());
