@@ -622,10 +622,8 @@ namespace SS_OpenCV
             MessageBox.Show((d2 - d1).ToString());
         }
 
-
         private void sinalToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             int[] HistY = new int[img.Height];
             int[] HistX = new int[img.Width];
             Image<Bgr, byte> imgTemp2;
