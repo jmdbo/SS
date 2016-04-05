@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Emgu.CV.Structure;
 using Emgu.CV;
+using System.Drawing;
 
 namespace SS_OpenCV
 {
@@ -1071,6 +1072,154 @@ namespace SS_OpenCV
                     dataUndoPtr += padding;
                 }
             }
+        }
+
+        public static void myRound(Image<Gray, float> img)
+        {
+            unsafe
+            {
+                // acesso directo à memoria da imagem (sequencial)
+                // top left to bottom right
+                MIplImage m = img.MIplImage;
+                int start = m.imageData.ToInt32();
+                float* dataPtr = (float*)start;
+                int h = img.Height;
+                int w = img.Width;
+                int x, y;
+                int nC = m.nChannels;
+                int wStep = m.widthStep - m.nChannels * m.width * sizeof(float);
+                //byte gray;
+
+                for (y = 0; y < h; y++)
+                {
+                    for (x = 0; x < w; x++)
+                    {
+                        // converte BGR para cinza 
+                        *dataPtr = (float)Math.Round((double)*dataPtr);
+
+                        // avança apontador 
+                        dataPtr++;
+                    }
+
+                    //no fim da linha avança alinhamento
+                    dataPtr += wStep;
+
+                }
+            }
+        }
+
+        public static Image<Gray, float> GetQuantificationMatrix(bool LuminanceOrChrominance, int compfactor)
+        {
+            float[] LumQuant = {   16,11,10,16,24,40,51,61,
+                                12,12,14,19,26,58,60,55,
+                                14,13,16,24,40,57,69,56,
+                                14,17,22,29,51,87,80,62,
+                                18,22,37,56,68,109,103,77,
+                                24,35,55,64,81,104,113,92,
+                                49,64,78,87,103,121,120,101,
+                                72,92,95,98,112,100,103,99};
+
+            float[] ChrQuant = {17,18,24,47,99,99,99,99,
+                                18,21,26,66,99,99,99,99,
+                                24,26,56,99,99,99,99,99,
+                                47,66,99,99,99,99,99,99,
+                                99,99,99,99,99,99,99,99,
+                                99,99,99,99,99,99,99,99,
+                                99,99,99,99,99,99,99,99,
+                                99,99,99,99,99,99,99,99
+                                };
+
+
+
+            Image<Gray, float> matrix = new Image<Gray, float>(8, 8);
+            int idx = 0;
+            float[] Quant = (LuminanceOrChrominance) ? LumQuant : ChrQuant;
+            for (int y = 0; y < 8; y++)
+            {
+                for (int x = 0; x < 8; x++)
+                {
+                    matrix[y, x] = new Gray(Quant[idx++] * 100 / compfactor);
+                }
+            }
+
+            return matrix;
+        }
+
+
+        /// <summary>
+        /// Compute image connected components 
+        /// </summary>
+        /// <param name="img"></param>
+        /// <returns></returns>
+        internal static Image<Gray, int> GetConnectedComponents(Image<Bgr, byte> img)
+        {
+            Image<Gray, byte> imgThresh = img.Convert<Gray, byte>();
+            CvInvoke.cvThreshold(imgThresh, imgThresh, 0, 255, Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY | Emgu.CV.CvEnum.THRESH.CV_THRESH_OTSU);
+
+            ShowSingleIMG.ShowIMGStatic(imgThresh);
+
+            Contour<Point > contours = imgThresh.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_NONE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_CCOMP);
+            Image<Gray, int> labelsImg = new Image<Gray, int>(imgThresh.Size);
+            int count = 1;
+
+            while (contours != null)
+            {
+                labelsImg.Draw(contours, new Gray(count), -1);
+                labelsImg.Draw(contours, new Gray(-10), 1);
+                contours = contours.HNext;
+                count++;
+            }
+
+            return labelsImg;
+        }
+
+
+
+        /// <summary>
+        /// Watershed with labels (Meyer)
+        /// </summary>
+        /// <param name="img"></param>
+        /// <param name="labels"></param>
+        /// <returns></returns>
+        internal static Image<Gray, int> GetWatershedFromLabels(Image<Bgr, byte> img, Image<Gray, byte> labels)
+        {
+            Image<Gray, int> watershedAux = labels.Convert<Gray, int>();
+
+            CvInvoke.cvWatershed(img, watershedAux);
+
+            return watershedAux;
+        }
+
+
+        /// <summary>
+        /// Watershed By Immersion (Vincent and Soille)
+        /// </summary>
+        /// <param name="img"></param>
+        /// <returns></returns>
+        internal static Image<Gray, int> GetWatershedByImmersion(Image<Bgr, byte> img)
+        {
+            WatershedGrayscale wt = new WatershedGrayscale();
+            Image<Gray, byte> wtImg = img.Convert<Gray, byte>();
+            wt.ProcessFilter(wtImg.Not());
+            wtImg.SetZero();
+            Image<Gray, int> wtOutimg = new Image<Gray, int>(img.Size);
+            wt.DrawWatershedLines(wtOutimg);
+
+            return wtOutimg;
+        }
+
+        /// <summary>
+        /// Get Gradient Path Labelling (GPL) segmnentation 
+        /// </summary>
+        /// <param name="img">image</param>
+        /// <returns></returns>
+        internal static Image<Bgr, byte> GetGPL(Image<Bgr, byte> img)
+        {
+            GPL_lib.GPL_lib gpl = new GPL_lib.GPL_lib(img, false);
+
+            gpl.ShowConfigForm();
+
+            return gpl.GetImage();
         }
     }
 }

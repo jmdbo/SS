@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.CV.Structure;
+using Emgu.CV.CvEnum;
 
 namespace SS_OpenCV
 {
@@ -536,25 +537,10 @@ namespace SS_OpenCV
         private void histogramToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int[] intensity = new int[256];
-            for (int i = 0; i < 256; i++)
-            {
-                intensity[i] = 0;
-            }
             int[] red = new int[256];
-            for (int i = 0; i < 256; i++)
-            {
-                intensity[i] = 0;
-            }
             int[] green = new int[256];
-            for (int i = 0; i < 256; i++)
-            {
-                intensity[i] = 0;
-            }
             int[] blue = new int[256];
-            for (int i = 0; i < 256; i++)
-            {
-                intensity[i] = 0;
-            }
+           
             if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
                 return;
 
@@ -797,6 +783,161 @@ namespace SS_OpenCV
 
 
 
+        }
+
+        private void aula1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int[] intensity = new int[256];
+            int[] red = new int[256];
+            int[] green = new int[256];
+            int[] blue = new int[256];
+
+            if (img == null) // protege de executar a função sem ainda ter aberto a imagem 
+                return;
+
+            Cursor = Cursors.WaitCursor; // cursor relogio                                         
+            DateTime d1 = DateTime.Now;
+            ImageClass.histogram(img, intensity, red, green, blue, 3);
+            Form CompTable = new CompressionTableForm(intensity, img);
+            CompTable.Show();
+
+            ImageViewer.Refresh(); // atualiza imagem no ecrã
+            DateTime d2 = DateTime.Now;
+            Cursor = Cursors.Default; // cursor normal
+            MessageBox.Show((d2 - d1).ToString());
+        }
+
+        private void aula2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null)
+                return;
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            Image<Gray, float> matrix = ImageClass.GetQuantificationMatrix(true, 100);
+            Image<Ycc, float> blockYCC;
+
+
+
+            //TableForm.ShowTableStatic(matrix,"Matriz de Quantificacao");
+
+
+            Image<Ycc, float> imgYCC = img.Convert<Ycc, float>(); //Transformar o espaço de cor RGB para YCbCr
+
+            // TODO subsampling
+
+            //Para cada bloco de 8x8 pixéis, fazer: (Copy(new rectangle(...) ) )
+            int Yblocks = (int)Math.Ceiling(img.Height / 8.0);
+            int Xblocks = (int)Math.Ceiling(img.Width / 8.0);
+
+
+            for (int x = 0; x < Xblocks; x++)
+            {
+                for (int y = 0; y < Yblocks; y++)
+                {
+
+                    Image<Gray, float> y1 = imgYCC[0].Copy(new Rectangle(x * 8, y * 8, 8, 8)); 
+                    Image<Gray, float> Cr = imgYCC[1].Copy(new Rectangle(x * 8, y * 8, 8, 8)); 
+                    Image<Gray, float> Cb = imgYCC[2].Copy(new Rectangle(x * 8, y * 8, 8, 8)); 
+
+                    CvInvoke.cvDCT(y1, y1, CV_DCT_TYPE.CV_DXT_FORWARD);//cálculo da transformada de cossenos DCT
+                    CvInvoke.cvDCT(Cb, Cb, CV_DCT_TYPE.CV_DXT_FORWARD);
+                    CvInvoke.cvDCT(Cr, Cr, CV_DCT_TYPE.CV_DXT_FORWARD);
+
+                    CvInvoke.cvDiv(y1, matrix, y1, 1); // quantificação dos coeficientes
+                    CvInvoke.cvDiv(Cb, matrix, Cb, 1);
+                    CvInvoke.cvDiv(Cr, matrix, Cr, 1);
+
+                    ImageClass.myRound(y1); //arredondamento dos coeficientes
+                    ImageClass.myRound(Cb);
+                    ImageClass.myRound(Cr);
+
+                    // DESCOMPRESSÃO
+
+                    CvInvoke.cvMul(y1, matrix, y1, 1); // recuperação dos coeficientes (Mul)
+                    CvInvoke.cvMul(Cb, matrix, Cb, 1);
+                    CvInvoke.cvMul(Cr, matrix, Cr, 1);
+
+                    CvInvoke.cvDCT(y1, y1, CV_DCT_TYPE.CV_DXT_INVERSE);//cálculo da transformada inversa de cossenos iDCT (
+                    CvInvoke.cvDCT(Cb, Cb, CV_DCT_TYPE.CV_DXT_INVERSE);
+                    CvInvoke.cvDCT(Cr, Cr, CV_DCT_TYPE.CV_DXT_INVERSE);
+
+                    imgYCC.ROI = new Rectangle(x * 8, y * 8, 8, 8);
+
+
+                    blockYCC = new Image<Ycc, float>(8, 8);
+                    CvInvoke.cvMerge(y1, Cr, Cb, IntPtr.Zero, blockYCC);
+
+
+                    blockYCC.CopyTo(imgYCC);
+
+                    imgYCC.ROI = Rectangle.Empty;
+
+                }
+            }
+
+            Image<Bgr, byte> imgfinal = imgYCC.Convert<Bgr, float>().Convert<Bgr, byte>();
+
+            ShowIMG.ShowIMGStatic(img, imgfinal);
+
+
+        }
+
+        private void componentesLigadosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null)
+                return;
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            Image<Gray, int> imgFinal = ImageClass.GetConnectedComponents(img);
+            ShowIMG.ShowIMGStatic(img, imgFinal);
+
+
+
+        }
+
+        private void fromLabelsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            if (img == null)
+                return;
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+            OpenFileDialog openMask = new OpenFileDialog();
+            if (openMask.ShowDialog() == DialogResult.OK)
+            {
+                Image<Gray, byte> mask = new Image<Gray, byte>(openMask.FileName);
+
+                Image<Gray, int> imgFinal = ImageClass.GetWatershedFromLabels(img, mask);
+                ShowIMG.ShowIMGStatic(img, imgFinal);
+            }
+
+        }
+
+        private void byImmersionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            if (img == null)
+                return;
+
+            //copy Undo Image
+            imgUndo = img.Copy();
+
+            Image<Gray, int> imgFinal = ImageClass.GetWatershedByImmersion(img);
+            ShowIMG.ShowIMGStatic(img, imgFinal);
+        }
+
+        private void getGPLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null)
+                return;
+
+            Image<Bgr, byte> imgFinal = ImageClass.GetGPL(img);
+            ShowIMG.ShowIMGStatic(img, imgFinal);
         }
 
         private void ImageViewer_MouseClick(object sender, MouseEventArgs e)
