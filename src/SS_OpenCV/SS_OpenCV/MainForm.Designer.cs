@@ -73,13 +73,23 @@
             this.aula2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aula3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.componentesLigadosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.ImageViewer = new System.Windows.Forms.PictureBox();
             this.watershedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromLabelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byImmersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getGPLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aula4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.houghTransformsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.houghLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hLinesWPreprocessingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.circlesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aula5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.multiplyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.ImageViewer = new System.Windows.Forms.PictureBox();
+            this.aula7ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.videoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageViewer)).BeginInit();
@@ -401,7 +411,10 @@
             this.tAPDIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aula1ToolStripMenuItem,
             this.aula2ToolStripMenuItem,
-            this.aula3ToolStripMenuItem});
+            this.aula3ToolStripMenuItem,
+            this.aula4ToolStripMenuItem,
+            this.aula5ToolStripMenuItem,
+            this.aula7ToolStripMenuItem});
             this.tAPDIToolStripMenuItem.Name = "tAPDIToolStripMenuItem";
             this.tAPDIToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
             this.tAPDIToolStripMenuItem.Text = "TAPDI";
@@ -437,6 +450,98 @@
             this.componentesLigadosToolStripMenuItem.Text = "Componentes Ligados";
             this.componentesLigadosToolStripMenuItem.Click += new System.EventHandler(this.componentesLigadosToolStripMenuItem_Click);
             // 
+            // watershedToolStripMenuItem
+            // 
+            this.watershedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fromLabelsToolStripMenuItem,
+            this.byImmersionToolStripMenuItem});
+            this.watershedToolStripMenuItem.Name = "watershedToolStripMenuItem";
+            this.watershedToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.watershedToolStripMenuItem.Text = "Watershed";
+            // 
+            // fromLabelsToolStripMenuItem
+            // 
+            this.fromLabelsToolStripMenuItem.Name = "fromLabelsToolStripMenuItem";
+            this.fromLabelsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.fromLabelsToolStripMenuItem.Text = "From Labels";
+            this.fromLabelsToolStripMenuItem.Click += new System.EventHandler(this.fromLabelsToolStripMenuItem_Click);
+            // 
+            // byImmersionToolStripMenuItem
+            // 
+            this.byImmersionToolStripMenuItem.Name = "byImmersionToolStripMenuItem";
+            this.byImmersionToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.byImmersionToolStripMenuItem.Text = "By Immersion";
+            this.byImmersionToolStripMenuItem.Click += new System.EventHandler(this.byImmersionToolStripMenuItem_Click);
+            // 
+            // getGPLToolStripMenuItem
+            // 
+            this.getGPLToolStripMenuItem.Name = "getGPLToolStripMenuItem";
+            this.getGPLToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.getGPLToolStripMenuItem.Text = "GetGPL";
+            this.getGPLToolStripMenuItem.Click += new System.EventHandler(this.getGPLToolStripMenuItem_Click);
+            // 
+            // aula4ToolStripMenuItem
+            // 
+            this.aula4ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.houghTransformsToolStripMenuItem,
+            this.houghLinesToolStripMenuItem,
+            this.hLinesWPreprocessingToolStripMenuItem,
+            this.circlesToolStripMenuItem});
+            this.aula4ToolStripMenuItem.Name = "aula4ToolStripMenuItem";
+            this.aula4ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aula4ToolStripMenuItem.Text = "Aula 4";
+            // 
+            // houghTransformsToolStripMenuItem
+            // 
+            this.houghTransformsToolStripMenuItem.Name = "houghTransformsToolStripMenuItem";
+            this.houghTransformsToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.houghTransformsToolStripMenuItem.Text = "Hough Transforms";
+            this.houghTransformsToolStripMenuItem.Click += new System.EventHandler(this.houghTransformsToolStripMenuItem_Click);
+            // 
+            // houghLinesToolStripMenuItem
+            // 
+            this.houghLinesToolStripMenuItem.Name = "houghLinesToolStripMenuItem";
+            this.houghLinesToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.houghLinesToolStripMenuItem.Text = "Hough Lines";
+            this.houghLinesToolStripMenuItem.Click += new System.EventHandler(this.houghLinesToolStripMenuItem_Click);
+            // 
+            // hLinesWPreprocessingToolStripMenuItem
+            // 
+            this.hLinesWPreprocessingToolStripMenuItem.Name = "hLinesWPreprocessingToolStripMenuItem";
+            this.hLinesWPreprocessingToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.hLinesWPreprocessingToolStripMenuItem.Text = "H. Lines w/Preprocessing";
+            this.hLinesWPreprocessingToolStripMenuItem.Click += new System.EventHandler(this.hLinesWPreprocessingToolStripMenuItem_Click);
+            // 
+            // circlesToolStripMenuItem
+            // 
+            this.circlesToolStripMenuItem.Name = "circlesToolStripMenuItem";
+            this.circlesToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.circlesToolStripMenuItem.Text = "Circles";
+            this.circlesToolStripMenuItem.Click += new System.EventHandler(this.circlesToolStripMenuItem_Click);
+            // 
+            // aula5ToolStripMenuItem
+            // 
+            this.aula5ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.getInfoToolStripMenuItem,
+            this.multiplyToolStripMenuItem});
+            this.aula5ToolStripMenuItem.Name = "aula5ToolStripMenuItem";
+            this.aula5ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aula5ToolStripMenuItem.Text = "Aula 5";
+            // 
+            // getInfoToolStripMenuItem
+            // 
+            this.getInfoToolStripMenuItem.Name = "getInfoToolStripMenuItem";
+            this.getInfoToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.getInfoToolStripMenuItem.Text = "Get Info";
+            this.getInfoToolStripMenuItem.Click += new System.EventHandler(this.getInfoToolStripMenuItem_Click);
+            // 
+            // multiplyToolStripMenuItem
+            // 
+            this.multiplyToolStripMenuItem.Name = "multiplyToolStripMenuItem";
+            this.multiplyToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.multiplyToolStripMenuItem.Text = "Multiply";
+            this.multiplyToolStripMenuItem.Click += new System.EventHandler(this.multiplyToolStripMenuItem_Click);
+            // 
             // autoresToolStripMenuItem
             // 
             this.autoresToolStripMenuItem.Name = "autoresToolStripMenuItem";
@@ -464,35 +569,20 @@
             this.ImageViewer.TabStop = false;
             this.ImageViewer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImageViewer_MouseClick);
             // 
-            // watershedToolStripMenuItem
+            // aula7ToolStripMenuItem
             // 
-            this.watershedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fromLabelsToolStripMenuItem,
-            this.byImmersionToolStripMenuItem});
-            this.watershedToolStripMenuItem.Name = "watershedToolStripMenuItem";
-            this.watershedToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.watershedToolStripMenuItem.Text = "Watershed";
+            this.aula7ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.videoToolStripMenuItem});
+            this.aula7ToolStripMenuItem.Name = "aula7ToolStripMenuItem";
+            this.aula7ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aula7ToolStripMenuItem.Text = "Aula 7";
             // 
-            // fromLabelsToolStripMenuItem
+            // videoToolStripMenuItem
             // 
-            this.fromLabelsToolStripMenuItem.Name = "fromLabelsToolStripMenuItem";
-            this.fromLabelsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.fromLabelsToolStripMenuItem.Text = "From Labels";
-            this.fromLabelsToolStripMenuItem.Click += new System.EventHandler(this.fromLabelsToolStripMenuItem_Click);
-            // 
-            // byImmersionToolStripMenuItem
-            // 
-            this.byImmersionToolStripMenuItem.Name = "byImmersionToolStripMenuItem";
-            this.byImmersionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.byImmersionToolStripMenuItem.Text = "By Immersion";
-            this.byImmersionToolStripMenuItem.Click += new System.EventHandler(this.byImmersionToolStripMenuItem_Click);
-            // 
-            // getGPLToolStripMenuItem
-            // 
-            this.getGPLToolStripMenuItem.Name = "getGPLToolStripMenuItem";
-            this.getGPLToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.getGPLToolStripMenuItem.Text = "GetGPL";
-            this.getGPLToolStripMenuItem.Click += new System.EventHandler(this.getGPLToolStripMenuItem_Click);
+            this.videoToolStripMenuItem.Name = "videoToolStripMenuItem";
+            this.videoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.videoToolStripMenuItem.Text = "Video";
+            this.videoToolStripMenuItem.Click += new System.EventHandler(this.videoToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -568,6 +658,16 @@
         private System.Windows.Forms.ToolStripMenuItem byImmersionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem watershedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem getGPLToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aula4ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem houghTransformsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem houghLinesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hLinesWPreprocessingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem circlesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aula5ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem getInfoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem multiplyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aula7ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem videoToolStripMenuItem;
     }
 }
 

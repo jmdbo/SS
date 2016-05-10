@@ -860,6 +860,35 @@ namespace SS_OpenCV
             }
         }
 
+        internal static Image<Bgr, byte> ShowHoughCircles(Image<Bgr, byte> img, Image<Bgr, byte> imgOriginal, int threshold)
+        {
+            // convert to Gray
+            Image<Gray, byte> imgGray = img.Convert<Gray, byte>();
+
+            int minraio = 40;
+            int maxraio = 100;
+            int canny = 50;
+            int minDistCirc = 20;
+
+            MemStorage SS = new MemStorage();
+            IntPtr segmentsPtr = CvInvoke.cvHoughCircles(imgGray, SS.Ptr,
+                Emgu.CV.CvEnum.HOUGH_TYPE.CV_HOUGH_GRADIENT, 1, minDistCirc, canny, threshold, minraio, maxraio);
+
+
+            // draw lines
+            Seq<CircleF> segments = new Seq<CircleF>(segmentsPtr, SS);
+            CircleF[] circles = segments.ToArray();
+
+            Image<Bgr, byte> circleImage = imgOriginal.Copy();
+
+            foreach (CircleF circle in circles)
+            {
+                circleImage.Draw(circle, new Bgr(255, 0, 0), 1);
+            }
+
+            return circleImage;
+        }
+
         internal static unsafe void histogram(Image<Bgr, byte> img, int[] intensity, int[] red, int[] green, int[] blue, int v)
         {
             MIplImage m = img.MIplImage;
@@ -1221,5 +1250,89 @@ namespace SS_OpenCV
 
             return gpl.GetImage();
         }
+
+
+
+        /// <summary>
+        /// Calculates Hough Transform major lines using EmguCV function
+        /// </summary>
+        /// <param name="imgPreprocessed"></param>
+        /// <param name="imgOriginal"></param>
+        /// <returns></returns>
+        internal static Image<Bgr, byte> ShowHoughLines(Image<Bgr, byte> img, Image<Bgr, byte> imgOriginal, int threshold)
+        {
+
+            // convert to Gray
+            Image<Gray, byte> imgGray = img.Convert<Gray, byte>();
+
+            MemStorage SS = new MemStorage();
+            IntPtr segmentsPtr = CvInvoke.cvHoughLines2(imgGray, SS.Ptr,
+                Emgu.CV.CvEnum.HOUGH_TYPE.CV_HOUGH_STANDARD, 1, Math.PI / 180, threshold, 0, 0);
+
+
+            // draw lines
+            Seq<PointF> segments = new Seq<PointF>(segmentsPtr, SS);
+            PointF[] lines = segments.ToArray();
+
+            Image<Bgr, byte> lineImage = imgOriginal.Copy();
+
+            foreach (PointF line in lines)
+            {
+                float rho = line.X;
+                float theta = line.Y;
+                Point pt1 = new Point(), pt2 = new Point();
+
+                double a = Math.Cos(theta), b = Math.Sin(theta);
+                double x0 = a * rho, y0 = b * rho;
+                pt1.X = (int)Math.Round(x0 + 1000 * (-b));
+                pt1.Y = (int)Math.Round(y0 + 1000 * (a));
+                pt2.X = (int)Math.Round(x0 - 1000 * (-b));
+                pt2.Y = (int)Math.Round(y0 - 1000 * (a));
+
+                lineImage.Draw(new LineSegment2D(pt1, pt2), new Bgr(255, 0, 0), 1);
+
+            }
+
+            return lineImage;
+        }
+
+
+
+        /// <summary>
+        /// Calculate Hough Transform Plane
+        /// </summary>
+        /// <param name="img"></param>
+        /// <param name="angleSpacing">Radians</param>
+        /// <param name="minAngle">Radians</param>
+        /// <param name="maxAngle">Radians</param>
+        /// <returns></returns>
+        internal static Image<Gray, float> HoughTransform(Image<Gray, byte> img, float angleSpacing, float minAngle, float maxAngle)
+        {
+            int numberAngles = (int)((maxAngle - minAngle) / angleSpacing);
+            float angle = 0;
+            Image<Gray, byte> workImg = img.Clone();
+            Matrix<float> imgHough = null;
+
+            for (float col = 0; col < numberAngles; col++)
+            {
+                workImg = img.Rotate(angle, new Gray(0), true);
+                angle += angleSpacing;
+
+                Matrix<float> imgMatH = new Matrix<float>(workImg.Height, 1, 1);
+
+                workImg.Reduce<float>(imgMatH, Emgu.CV.CvEnum.REDUCE_DIMENSION.SINGLE_COL, Emgu.CV.CvEnum.REDUCE_TYPE.CV_REDUCE_SUM);
+                if (imgHough == null)
+                    imgHough = imgMatH;
+                else
+                    imgHough = imgHough.ConcateHorizontal(imgMatH);
+
+            }
+            Image<Gray, float> houghImg = new Image<Gray, float>(numberAngles, img.Height);
+            CvInvoke.cvConvert(imgHough, houghImg);
+
+            return houghImg;
+        }
+
+
     }
 }

@@ -77,6 +77,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\ImageClass.dll</HintPath>
     </Reference>
+    <Reference Include="OpenCL.NET, Version=1.1.44.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\OpenCL.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -121,6 +125,7 @@
     <Compile Include="InputXY.Designer.cs">
       <DependentUpon>InputXY.cs</DependentUpon>
     </Compile>
+    <Compile Include="OpenCL_Class.cs" />
     <Compile Include="ShowIMG.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,6 +220,7 @@
       <DependentUpon>WeightMatrixBox.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="prog.cl" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -244,6 +250,10 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="haarcascade_eye.xml" />
+    <Content Include="haarcascade_frontalface_default.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

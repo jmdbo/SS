@@ -18,6 +18,9 @@ namespace SS_OpenCV
     {
         Image<Bgr, Byte> img = null; // imagem corrente
         Image<Bgr, Byte> imgUndo = null; // imagem backup - UNDO
+        Image<Bgr, Byte> imgOri = null;
+        ImageViewer viewer = null;
+        Capture capture;
         int mouseX = 0, mouseY=0;
         string title_bak = "";
 
@@ -43,6 +46,7 @@ namespace SS_OpenCV
                         openFileDialog1.FileName.Substring(openFileDialog1.FileName.LastIndexOf("\\") + 1) +
                         "]";
                 imgUndo = img.Copy();
+                imgOri = img.Copy();
                 ImageViewer.Image = img.Bitmap;
                 ImageViewer.Refresh();
             }
@@ -939,6 +943,133 @@ namespace SS_OpenCV
             Image<Bgr, byte> imgFinal = ImageClass.GetGPL(img);
             ShowIMG.ShowIMGStatic(img, imgFinal);
         }
+
+        private void houghTransformsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null)
+                return;
+
+            float angleSpacing = 1;
+            float minAngle = 0;
+            float maxAngle = 180;
+            Image<Gray, float> houghImg = ImageClass.HoughTransform(img.Convert<Gray, byte>(), angleSpacing, minAngle, maxAngle);
+
+            ShowIMG.ShowIMGStatic(img, houghImg);
+        }
+
+        private void houghLinesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null)
+                return;
+
+            float angleSpacing = 1;
+            float minAngle = 0;
+            float maxAngle = 180;
+            int T = 2;
+
+
+            Image<Gray, float> houghImg = ImageClass.HoughTransform(img.Convert<Gray, byte>(), angleSpacing, minAngle, maxAngle);
+
+
+            //  Image<Bgr, byte> img1 = null;
+            Image<Bgr, byte> lines = ImageClass.ShowHoughLines(img, img, T);
+            ShowIMG.ShowIMGStatic(houghImg, lines);
+        }
+
+        private void hLinesWPreprocessingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null)
+                return;
+
+            float angleSpacing = 1;
+            float minAngle = 0;
+            float maxAngle = 180;
+            InputBox Threshold = new InputBox();
+
+            Threshold.ShowDialog();
+            int T = Convert.ToInt32(Threshold.ValueTextBox.Text);
+
+            imgUndo = img.Copy();
+
+            ImageClass.sobelfilter(imgUndo, img, 3);
+            ImageClass.otsu(imgUndo, img);
+
+            Image<Gray, float> houghImg = ImageClass.HoughTransform(img.Convert<Gray, byte>(), angleSpacing, minAngle, maxAngle);
+
+            Image<Bgr, byte> lines = ImageClass.ShowHoughLines(img, imgOri, T);
+
+            ShowIMG.ShowIMGStatic(img, lines);
+        }
+
+        private void circlesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null)
+                return;
+
+            float angleSpacing = 1;
+            float minAngle = 0;
+            float maxAngle = 180;
+            InputBox Threshold = new InputBox();
+
+            Threshold.ShowDialog();
+            int T = Convert.ToInt32(Threshold.ValueTextBox.Text);
+
+            imgUndo = img.Copy();
+
+            Image<Gray, float> houghImg = ImageClass.HoughTransform(img.Convert<Gray, byte>(), angleSpacing, minAngle, maxAngle);
+
+            Image<Bgr, byte> lines = ImageClass.ShowHoughCircles(img, imgOri, T);
+
+           ShowIMG.ShowIMGStatic(img, lines);
+        }
+
+        private void getInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenCL_Class.GetInfo();
+        }
+
+        private void multiplyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenCL_Class.Setup();
+            OpenCL_Class.Multiply();
+            OpenCL_Class.Release();
+        }
+
+        private void videoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            viewer = new ImageViewer(); //create an image viewer
+            capture = new Capture(); //create a camera captue
+            Application.Idle += ProcessFrame;
+            viewer.ShowDialog(); //show the image viewer
+            viewer.FormClosed += Viewer_FormClosed;
+        }
+
+        private void Viewer_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Idle -= ProcessFrame;
+            capture.Dispose();
+            viewer.Dispose();
+
+        }
+
+        private void ProcessFrame(object sender, EventArgs e)
+        {
+            if(viewer!=null && capture != null)
+            {
+                img = capture.QueryFrame();
+      
+                HaarCascade haar = new HaarCascade("../../haarcascade_frontalface_default.xml");
+                Image<Gray, byte> grayframe = img.Convert<Gray, byte>();
+                var faces = haar.Detect(grayframe, 1.2, 3, HAAR_DETECTION_TYPE.DO_ROUGH_SEARCH, new Size(20, 20), new Size(img.Width / 2, img.Height / 2));
+                foreach (var face in faces)
+                {
+                    img.Draw(face.rect, new Bgr(0, double.MaxValue, 0), 3);
+                }
+                viewer.Image = img;
+            }
+                
+        }
+
 
         private void ImageViewer_MouseClick(object sender, MouseEventArgs e)
         {
