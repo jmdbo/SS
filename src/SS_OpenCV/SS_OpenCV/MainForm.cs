@@ -1070,6 +1070,79 @@ namespace SS_OpenCV
                 
         }
 
+        private void fFTWebcamToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Image<Gray, float> fft_Amp = null;
+            Image<Gray, float> fft_Phase = null;
+
+            Capture capture = new Capture();
+            img = capture.QueryFrame().Clone();
+            capture.Dispose();
+
+            FFT.GetFFTAmpAndPhase(img, out fft_Amp, out fft_Phase);
+
+            fft_Amp = FFT.PrepareForVizualization(fft_Amp, true);
+            fft_Phase = FFT.PrepareForVizualization(fft_Phase, false);
+
+            ShowIMG.ShowIMGStatic(fft_Amp, fft_Phase);
+
+
+        }
+
+        private void fFTSwitchAmpPhaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+            Image<Bgr, byte> img_fft1 = new Image<Bgr, byte>(openFileDialog1.FileName);
+            openFileDialog1.ShowDialog();
+            Image<Bgr, byte> img_fft2 = new Image<Bgr, byte>(openFileDialog1.FileName);
+
+            ShowIMG.ShowIMGStatic(img_fft1, img_fft2);
+
+            Image<Gray, float> fft_Amp1 = null;
+            Image<Gray, float> fft_Phase1 = null;
+            Image<Gray, float> fft_Amp2 = null;
+            Image<Gray, float> fft_Phase2 = null;
+
+            FFT.GetFFTAmpAndPhase(img_fft1, out fft_Amp1, out fft_Phase1);
+            FFT.GetFFTAmpAndPhase(img_fft2, out fft_Amp2, out fft_Phase2);
+
+            Image<Gray, byte> res1 = FFT.GetFFT_InverseAmpAndPhase(fft_Amp1, fft_Phase2);
+            Image<Gray, byte> res2 = FFT.GetFFT_InverseAmpAndPhase(fft_Amp2, fft_Phase1);
+
+
+            ShowIMG.ShowIMGStatic(res1, res2);
+
+        }
+
+        private void idealFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (img == null)
+                return;
+            try
+            {
+                Image<Gray, float> fft_Amp = null;
+                Image<Gray, float> fft_Phase = null;
+
+                InputBox inputFreq = new InputBox("Cut Frequency");
+
+                inputFreq.ShowDialog();
+
+                int freq = Convert.ToInt32(inputFreq.ValueTextBox.Text);
+
+                FFT.GetFFTAmpAndPhase(img, out fft_Amp, out fft_Phase);
+                Image<Gray, float> mask = FFT.GenerateFilterMask(fft_Amp.Size, false, freq);
+                fft_Amp._Mul(mask);
+                Image<Gray, byte> img_filter = FFT.GetFFT_InverseAmpAndPhase(fft_Amp, fft_Phase);
+
+                ShowIMG.ShowIMGStatic(img, img_filter);
+
+            }
+            catch (Exception ex)
+            {
+                   MessageBox.Show("ERROR! Exception: " + ex.Message);
+            }
+            
+        }
 
         private void ImageViewer_MouseClick(object sender, MouseEventArgs e)
         {

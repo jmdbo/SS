@@ -85,11 +85,15 @@
             this.aula5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multiplyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aula7ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.videoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ImageViewer = new System.Windows.Forms.PictureBox();
-            this.aula7ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.videoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aula8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fFTWebcamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fFTSwitchAmpPhaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.idealFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageViewer)).BeginInit();
@@ -414,7 +418,8 @@
             this.aula3ToolStripMenuItem,
             this.aula4ToolStripMenuItem,
             this.aula5ToolStripMenuItem,
-            this.aula7ToolStripMenuItem});
+            this.aula7ToolStripMenuItem,
+            this.aula8ToolStripMenuItem});
             this.tAPDIToolStripMenuItem.Name = "tAPDIToolStripMenuItem";
             this.tAPDIToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
             this.tAPDIToolStripMenuItem.Text = "TAPDI";
@@ -542,6 +547,21 @@
             this.multiplyToolStripMenuItem.Text = "Multiply";
             this.multiplyToolStripMenuItem.Click += new System.EventHandler(this.multiplyToolStripMenuItem_Click);
             // 
+            // aula7ToolStripMenuItem
+            // 
+            this.aula7ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.videoToolStripMenuItem});
+            this.aula7ToolStripMenuItem.Name = "aula7ToolStripMenuItem";
+            this.aula7ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aula7ToolStripMenuItem.Text = "Aula 7";
+            // 
+            // videoToolStripMenuItem
+            // 
+            this.videoToolStripMenuItem.Name = "videoToolStripMenuItem";
+            this.videoToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.videoToolStripMenuItem.Text = "Video";
+            this.videoToolStripMenuItem.Click += new System.EventHandler(this.videoToolStripMenuItem_Click);
+            // 
             // autoresToolStripMenuItem
             // 
             this.autoresToolStripMenuItem.Name = "autoresToolStripMenuItem";
@@ -569,20 +589,36 @@
             this.ImageViewer.TabStop = false;
             this.ImageViewer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImageViewer_MouseClick);
             // 
-            // aula7ToolStripMenuItem
+            // aula8ToolStripMenuItem
             // 
-            this.aula7ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.videoToolStripMenuItem});
-            this.aula7ToolStripMenuItem.Name = "aula7ToolStripMenuItem";
-            this.aula7ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.aula7ToolStripMenuItem.Text = "Aula 7";
+            this.aula8ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fFTWebcamToolStripMenuItem,
+            this.fFTSwitchAmpPhaseToolStripMenuItem,
+            this.idealFilterToolStripMenuItem});
+            this.aula8ToolStripMenuItem.Name = "aula8ToolStripMenuItem";
+            this.aula8ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aula8ToolStripMenuItem.Text = "Aula 8";
             // 
-            // videoToolStripMenuItem
+            // fFTWebcamToolStripMenuItem
             // 
-            this.videoToolStripMenuItem.Name = "videoToolStripMenuItem";
-            this.videoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.videoToolStripMenuItem.Text = "Video";
-            this.videoToolStripMenuItem.Click += new System.EventHandler(this.videoToolStripMenuItem_Click);
+            this.fFTWebcamToolStripMenuItem.Name = "fFTWebcamToolStripMenuItem";
+            this.fFTWebcamToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fFTWebcamToolStripMenuItem.Text = "FFT Webcam";
+            this.fFTWebcamToolStripMenuItem.Click += new System.EventHandler(this.fFTWebcamToolStripMenuItem_Click);
+            // 
+            // fFTSwitchAmpPhaseToolStripMenuItem
+            // 
+            this.fFTSwitchAmpPhaseToolStripMenuItem.Name = "fFTSwitchAmpPhaseToolStripMenuItem";
+            this.fFTSwitchAmpPhaseToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.fFTSwitchAmpPhaseToolStripMenuItem.Text = "FFT Switch Amp Phase";
+            this.fFTSwitchAmpPhaseToolStripMenuItem.Click += new System.EventHandler(this.fFTSwitchAmpPhaseToolStripMenuItem_Click);
+            // 
+            // idealFilterToolStripMenuItem
+            // 
+            this.idealFilterToolStripMenuItem.Name = "idealFilterToolStripMenuItem";
+            this.idealFilterToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.idealFilterToolStripMenuItem.Text = "Ideal Filter";
+            this.idealFilterToolStripMenuItem.Click += new System.EventHandler(this.idealFilterToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -668,6 +704,10 @@
         private System.Windows.Forms.ToolStripMenuItem multiplyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aula7ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem videoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aula8ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fFTWebcamToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fFTSwitchAmpPhaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem idealFilterToolStripMenuItem;
     }
 }
 

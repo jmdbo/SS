@@ -106,6 +106,7 @@
     <Compile Include="CompressionTableForm.designer.cs">
       <DependentUpon>CompressionTableForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FFT.cs" />
     <Compile Include="HistogramXY.cs">
       <SubType>Form</SubType>
     </Compile>

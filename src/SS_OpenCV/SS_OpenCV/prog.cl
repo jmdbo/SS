@@ -14,7 +14,7 @@ __global uchar* imageOut)
 	int x = get_global_id(0);
 	int y = get_global_id(1);
 	
-	if(x < w && y < h){
+	if(x < w && y < h	){
 		int x_pos = x * nchan;
 		int y_pos = y * (w * nchan + padding);
 
